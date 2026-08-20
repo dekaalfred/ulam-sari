@@ -36,28 +36,41 @@
     </nav>
 
     <!-- HERO SECTION -->
-    <section class="relative bg-[#2D1A12] text-white py-24 px-6 bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 26, 18, 0.85), rgba(45, 26, 18, 0.85)), url('{{ asset('images/background.png') }}');">
-        <div class="max-w-4xl mx-auto text-center space-y-6">
-            <p class="text-xs uppercase tracking-widest text-[#D1C7BD]">WARUNG JAWA • KUSUMANING • AJIBARANG</p>
-            <h1 class="text-4xl md:text-6xl font-serif font-bold text-[#F4EBE1]">Rasa Jawa, Cerita yang Terjaga.</h1>
-            <p class="text-stone-300 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-                Nikmati masakan Jawa dengan cita rasa otentik di Ulam Sari Ajibarang.
-            </p>
-            <div class="flex justify-center gap-4 pt-4">
-                <a href="/menu" class="bg-[#C86D3B] hover:bg-[#b05c2e] text-white px-6 py-3 rounded-md font-medium text-sm transition">Lihat Menu</a>
-                <a href="#" class="border border-white/40 hover:bg-white/10 text-white px-6 py-3 rounded-md font-medium text-sm flex items-center gap-2 transition">
-                    <span>💬 Tanya Ulam AI</span>
-                </a>
-            </div>
-            <div class="flex justify-center gap-8 pt-8 text-xs text-[#D1C7BD] tracking-wider uppercase font-semibold">
-                <span>Nasi Boks</span>
-                <span>•</span>
-                <span>Tumpeng</span>
-                <span>•</span>
-                <span>Katering Prasmanan</span>
-            </div>
+<section class="relative bg-[#2D1A12] text-white py-24 px-6 bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 26, 18, 0.82), rgba(45, 26, 18, 0.82)), url('{{ asset('images/WhatsApp Image 2026-08-11 at 14.54.59 1 (1).png') }}');">
+    <div class="max-w-4xl mx-auto text-center space-y-6">
+        
+        <!-- Badge Atas -->
+        <div>
+            <span class="inline-block border border-white/30 px-4 py-1.5 rounded-full text-xs uppercase tracking-widest text-[#D1C7BD]">
+                WARUNG JAWA • AJIBARANG • BANYUMAS
+            </span>
         </div>
-    </section>
+
+        <!-- Judul & Subjudul -->
+        <h1 class="text-4xl md:text-6xl font-serif font-bold text-[#F4EBE1]">Rasa Jawa, Cerita yang Terjaga.</h1>
+        <p class="text-stone-300 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+            Nikmati masakan Jawa dengan cita rasa rumahan di Ulam Sari Ajibarang.
+        </p>
+
+        <!-- Tombol -->
+        <div class="flex justify-center gap-4 pt-4">
+            <a href="/menu" class="bg-[#A34E2A] hover:bg-[#8b4122] text-white px-6 py-3 rounded-md font-medium text-sm transition">Lihat Menu</a>
+            <a href="#" class="border border-white/60 hover:bg-white/10 text-white px-6 py-3 rounded-md font-medium text-sm flex items-center gap-2 transition">
+                <span>🤖 Tanya Ulam AI</span>
+            </a>
+        </div>
+
+        <!-- Fitur Bawah -->
+        <div class="flex justify-center gap-6 pt-8 text-xs text-[#D1C7BD] tracking-wider uppercase font-semibold">
+            <span>NASI BOX</span>
+            <span>•</span>
+            <span>TUMPENG</span>
+            <span>•</span>
+            <span>RESERVASI & ACARA</span>
+        </div>
+
+    </div>
+</section>
 
     <!-- SECTION 2: Lebih dari Sekadar Makan -->
     <section class="max-w-7xl mx-auto py-20 px-6">
