@@ -29,48 +29,50 @@
                 <a href="/reservasi" class="hover:text-white transition">Reservasi</a>
                 <a href="/tentang-kami" class="hover:text-white transition">Tentang Kami</a>
             </div>
-            <a href="#" class="bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs md:text-sm px-4 py-2 rounded-full flex items-center gap-2 transition">
+            <!-- DIPERBAIKI: Mengarah ke route ai.index -->
+            <a href="{{ route('ai.index') }}" class="bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs md:text-sm px-4 py-2 rounded-full flex items-center gap-2 transition">
                 <span>💬 Tanya Ulam AI</span>
             </a>
         </div>
     </nav>
 
     <!-- HERO SECTION -->
-<section class="relative bg-[#2D1A12] text-white py-24 px-6 bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 26, 18, 0.82), rgba(45, 26, 18, 0.82)), url('{{ asset('images/WhatsApp Image 2026-08-11 at 14.54.59 1 (1).png') }}');">
-    <div class="max-w-4xl mx-auto text-center space-y-6">
-        
-        <!-- Badge Atas -->
-        <div>
-            <span class="inline-block border border-white/30 px-4 py-1.5 rounded-full text-xs uppercase tracking-widest text-[#D1C7BD]">
-                WARUNG JAWA • AJIBARANG • BANYUMAS
-            </span>
+    <section class="relative bg-[#2D1A12] text-white py-24 px-6 bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 26, 18, 0.82), rgba(45, 26, 18, 0.82)), url('{{ asset('images/WhatsApp Image 2026-08-11 at 14.54.59 1 (1).png') }}');">
+        <div class="max-w-4xl mx-auto text-center space-y-6">
+            
+            <!-- Badge Atas -->
+            <div>
+                <span class="inline-block border border-white/30 px-4 py-1.5 rounded-full text-xs uppercase tracking-widest text-[#D1C7BD]">
+                    WARUNG JAWA • AJIBARANG • BANYUMAS
+                </span>
+            </div>
+
+            <!-- Judul & Subjudul -->
+            <h1 class="text-4xl md:text-6xl font-serif font-bold text-[#F4EBE1]">Rasa Jawa, Cerita yang Terjaga.</h1>
+            <p class="text-stone-300 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+                Nikmati masakan Jawa dengan cita rasa rumahan di Ulam Sari Ajibarang.
+            </p>
+
+            <!-- Tombol -->
+            <div class="flex justify-center gap-4 pt-4">
+                <a href="/menu" class="bg-[#A34E2A] hover:bg-[#8b4122] text-white px-6 py-3 rounded-md font-medium text-sm transition">Lihat Menu</a>
+                <!-- DIPERBAIKI: Mengarah ke route ai.index -->
+                <a href="{{ route('ai.index') }}" class="border border-white/60 hover:bg-white/10 text-white px-6 py-3 rounded-md font-medium text-sm flex items-center gap-2 transition">
+                    <span>🤖 Tanya Ulam AI</span>
+                </a>
+            </div>
+
+            <!-- Fitur Bawah -->
+            <div class="flex justify-center gap-6 pt-8 text-xs text-[#D1C7BD] tracking-wider uppercase font-semibold">
+                <span>NASI BOX</span>
+                <span>•</span>
+                <span>TUMPENG</span>
+                <span>•</span>
+                <span>RESERVASI & ACARA</span>
+            </div>
+
         </div>
-
-        <!-- Judul & Subjudul -->
-        <h1 class="text-4xl md:text-6xl font-serif font-bold text-[#F4EBE1]">Rasa Jawa, Cerita yang Terjaga.</h1>
-        <p class="text-stone-300 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-            Nikmati masakan Jawa dengan cita rasa rumahan di Ulam Sari Ajibarang.
-        </p>
-
-        <!-- Tombol -->
-        <div class="flex justify-center gap-4 pt-4">
-            <a href="/menu" class="bg-[#A34E2A] hover:bg-[#8b4122] text-white px-6 py-3 rounded-md font-medium text-sm transition">Lihat Menu</a>
-            <a href="#" class="border border-white/60 hover:bg-white/10 text-white px-6 py-3 rounded-md font-medium text-sm flex items-center gap-2 transition">
-                <span>🤖 Tanya Ulam AI</span>
-            </a>
-        </div>
-
-        <!-- Fitur Bawah -->
-        <div class="flex justify-center gap-6 pt-8 text-xs text-[#D1C7BD] tracking-wider uppercase font-semibold">
-            <span>NASI BOX</span>
-            <span>•</span>
-            <span>TUMPENG</span>
-            <span>•</span>
-            <span>RESERVASI & ACARA</span>
-        </div>
-
-    </div>
-</section>
+    </section>
 
     <!-- SECTION 2: Lebih dari Sekadar Makan -->
     <section class="max-w-7xl mx-auto py-20 px-6">
