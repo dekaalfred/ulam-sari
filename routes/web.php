@@ -2,23 +2,36 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\UlamAiController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\ReservationController;
 
-// Halaman Utama / Beranda
+// ==========================================
+// ROUTE AUTENTIKASI (LOGIN & LOGOUT)
+// ==========================================
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+// ==========================================
+// ROUTE HALAMAN PUBLIK
+// ==========================================
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Halaman Menu
 Route::get('/menu', function () {
     return view('menu');
 });
 
-// Halaman Reservasi
 Route::get('/reservasi', function () {
     return view('reservasi');
 })->name('reservasi');
 
-// Proses Simpan Form Reservasi
 Route::post('/reservasi', function (Request $request) {
     $validated = $request->validate([
         'nama_lengkap'   => 'required|string|max:255',
@@ -30,18 +43,22 @@ Route::post('/reservasi', function (Request $request) {
 
     return back()->with('success', 'Reservasi berhasil dikirim!');
 })->name('reservasi.store');
+
 Route::get('/tentang-kami', function () {
-    return view('tentang-kami'); // Pastikan nama file Blade Anda adalah tentang-kami.blade.php
+    return view('tentang-kami');
 });
-use App\Http\Controllers\UlamAiController;
 
-// Halaman Chat UI
+// Fitur Tanya Ulam AI
 Route::get('/tanya-ai', [UlamAiController::class, 'index'])->name('ai.index');
-
-// Endpoint AJAX untuk kirim pesan
 Route::post('/tanya-ai/chat', [UlamAiController::class, 'chat'])->name('ai.chat');
-use App\Http\Controllers\AiController; // Sesuaikan dengan controller Anda jika ada
 
-Route::get('/ulam-ai', function () {
-    return view('ulam-ai'); // Pastikan Anda memiliki file resource/views/ulam-ai.blade.php
+
+// ==========================================
+// ROUTE PANEL ADMIN (Protected by Auth)
+// ==========================================
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('/menus', MenuController::class);
+    Route::resource('/reservations', ReservationController::class);
 });

@@ -6,7 +6,9 @@
     <title>Ulam Sari - Beranda</title>
     <!-- CDN Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts untuk kesan elegan -->
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,12 +26,12 @@
                 <span class="text-2xl font-serif font-bold tracking-wide">Ulam Sari</span>
             </div>
             <div class="hidden md:flex space-x-8 text-sm font-medium text-[#D1C7BD]">
-                <a href="/" class="text-white font-semibold border-b-2 border-[#C86D3B] pb-1">Beranda</a>
+               <a href="{{ url('/') }}" class="hover:underline">Beranda</a>
                 <a href="/menu" class="hover:text-white transition">Menu</a>
                 <a href="/reservasi" class="hover:text-white transition">Reservasi</a>
                 <a href="/tentang-kami" class="hover:text-white transition">Tentang Kami</a>
             </div>
-            <!-- DIPERBAIKI: Mengarah ke route ai.index -->
+            <!-- Tombol Tanya Ulam AI -->
             <a href="{{ route('ai.index') }}" class="bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs md:text-sm px-4 py-2 rounded-full flex items-center gap-2 transition">
                 <span>💬 Tanya Ulam AI</span>
             </a>
@@ -50,15 +52,14 @@
             <!-- Judul & Subjudul -->
             <h1 class="text-4xl md:text-6xl font-serif font-bold text-[#F4EBE1]">Rasa Jawa, Cerita yang Terjaga.</h1>
             <p class="text-stone-300 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-                Nikmati masakan Jawa dengan cita rasa rumahan di Ulam Sari Ajibarang.
+                Nikmati masakan Jawa dengan cita rasa rumahan otentik di Ulam Sari Ajibarang.
             </p>
 
             <!-- Tombol -->
             <div class="flex justify-center gap-4 pt-4">
                 <a href="/menu" class="bg-[#A34E2A] hover:bg-[#8b4122] text-white px-6 py-3 rounded-md font-medium text-sm transition">Lihat Menu</a>
-                <!-- DIPERBAIKI: Mengarah ke route ai.index -->
                 <a href="{{ route('ai.index') }}" class="border border-white/60 hover:bg-white/10 text-white px-6 py-3 rounded-md font-medium text-sm flex items-center gap-2 transition">
-                    <span>🤖 Tanya Ulam AI</span>
+                    <span> Tanya Ulam AI</span>
                 </a>
             </div>
 
@@ -127,87 +128,91 @@
                 <div class="p-4 space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-base">Menu 1</h3>
-                        <span class="text-[10px] bg-stone-100 px-2 py-1 rounded text-stone-600 font-medium">Ayam Goreng</span>
+                        <span class="text-[10px] bg-stone-100 px-2 py-1 rounded text-stone-600 font-medium">Ayam Negri</span>
                     </div>
-                    <p class="text-xs text-stone-500">Nasi Putih, Ayam Goreng, Sambal Lalap, Tahu Tempe</p>
+                    <p class="text-xs text-stone-500">Nasi putih, Ayam Negeri
+(Goreng/Bakar), 2 Jenis Sayur.</p>
                     <p class="text-[#C86D3B] font-bold text-sm pt-2">Rp22.000</p>
                 </div>
             </div>
 
             <!-- Card Menu 2 -->
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-stone-100">
-                <img src="{{ asset('images/tumpeng.png') }}" class="w-full h-44 object-cover" alt="Menu 2 Nasi Box">
+                <img src="{{ asset('images/ayam kampung.png') }}" class="w-full h-44 object-cover" alt="Menu 2 Nasi Box">
                 <div class="p-4 space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-base">Menu 2</h3>
                         <span class="text-[10px] bg-stone-100 px-2 py-1 rounded text-stone-600 font-medium">Ayam Kampung</span>
                     </div>
-                    <p class="text-xs text-stone-500">Nasi Putih, Ayam Bakar Kampung, Oreg Tempe, Sambal Bajak</p>
-                    <p class="text-[#C86D3B] font-bold text-sm pt-2">Rp28.000</p>
+                    <p class="text-xs text-stone-500">Nasi putih, Ayam Kampung
+(Goreng/Oporr), 2 Jenis Sayur.</p>
+                    <p class="text-[#C86D3B] font-bold text-sm pt-2">Rp36.000</p>
                 </div>
             </div>
 
             <!-- Card Menu 3 -->
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-stone-100">
-                <img src="{{ asset('images/tumpeng.png') }}" class="w-full h-44 object-cover" alt="Menu 3 Nasi Box">
+                <img src="{{ asset('images/menu ikan.png') }}" class="w-full h-44 object-cover" alt="Menu 3 Nasi Box">
                 <div class="p-4 space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-base">Menu 3</h3>
-                        <span class="text-[10px] bg-stone-100 px-2 py-1 rounded text-stone-600 font-medium">Nila Bakar</span>
+                        <span class="text-[10px] bg-stone-100 px-2 py-1 rounded text-stone-600 font-medium">Pilihan Ikan</span>
                     </div>
-                    <p class="text-xs text-stone-500">Nasi Putih, Nila Bakar Madu, Tumis Buncis</p>
-                    <p class="text-[#C86D3B] font-bold text-sm pt-2">Rp25.000</p>
+                    <p class="text-xs text-stone-500">Nasi putih, Pilihan Jenis Ikan
+2 Jenis Sayur.</p>
+                    <p class="text-[#C86D3B] font-bold text-sm pt-2">Rp36.000</p>
                 </div>
             </div>
 
             <!-- Card Menu 4 -->
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-stone-100">
-                <img src="{{ asset('images/tumpeng.png') }}" class="w-full h-44 object-cover" alt="Menu 4 Nasi Box">
+                <img src="{{ asset('images/1.png') }}" class="w-full h-44 object-cover" alt="Menu 4 Nasi Box">
                 <div class="p-4 space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-base">Menu 4</h3>
-                        <span class="text-[10px] bg-stone-100 px-2 py-1 rounded text-stone-600 font-medium">Empal Daging</span>
+                        <span class="text-[10px] bg-stone-100 px-2 py-1 rounded text-stone-600 font-medium">Aneka pepes</span>
                     </div>
-                    <p class="text-xs text-stone-500">Nasi Putih, Empal Daging, Tumis Terong, Sambal</p>
-                    <p class="text-[#C86D3B] font-bold text-sm pt-2">Rp30.000</p>
+                    <p class="text-xs text-stone-500">Nasi putih, Pilihan Pepes
+2 Jenis Sayur.</p>
+                    <p class="text-[#C86D3B] font-bold text-sm pt-2">Rp36.000</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="bg-[#1C3A27] text-white pt-16 pb-8 px-6">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-emerald-800 text-sm">
+    <!-- FOOTER LENGKAP DENGAN INFORMASI LOKASI -->
+    <footer class="bg-[#0F2218] text-amber-100/80 pt-16 pb-8 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-emerald-800/60 text-sm">
             <div class="space-y-4">
-                <h3 class="font-serif font-bold text-2xl">Ulam Sari</h3>
-                <p class="text-emerald-200 text-xs leading-relaxed">
-                    Masakan khas Jawa tradisional. Menyajikan kehangatan masakan keluarga bernuansa keakraban di Ajibarang.
+                <h3 class="font-serif font-bold text-2xl text-[#E0C097]">Ulam Sari</h3>
+                <p class="text-emerald-200/80 text-xs leading-relaxed">
+                    Masakan khas Jawa tradisional. Menyajikan kehangatan masakan keluarga bernuansa keakraban di Ajibarang, Banyumas.
                 </p>
             </div>
             <div class="space-y-3">
-                <h4 class="font-bold text-emerald-400 text-xs uppercase tracking-wider">Tautan</h4>
-                <ul class="space-y-2 text-xs text-emerald-100">
-                    <li><a href="/" class="hover:underline">Beranda</a></li>
+                <h4 class="font-bold text-[#E0C097] text-xs uppercase tracking-wider">Tautan</h4>
+                <ul class="space-y-2 text-xs text-emerald-100/90">
+               <a href="{{ url('/') }}" class="hover:underline">Beranda</a>
                     <li><a href="/menu" class="hover:underline">Menu</a></li>
                     <li><a href="/reservasi" class="hover:underline">Reservasi</a></li>
-                </ul>
-            </div>
-            <div class="space-y-3">
-                <h4 class="font-bold text-emerald-400 text-xs uppercase tracking-wider">Informasi</h4>
-                <ul class="space-y-2 text-xs text-emerald-100">
-                    <li><a href="/tentang-kami" class="hover:underline">Lokasi</a></li>
                     <li><a href="/tentang-kami" class="hover:underline">Tentang Kami</a></li>
-                    <li><a href="#" class="hover:underline">Kebijakan Privasi</a></li>
                 </ul>
             </div>
             <div class="space-y-3">
-                <h4 class="font-bold text-emerald-400 text-xs uppercase tracking-wider">Jam Buka</h4>
-                <p class="text-xs text-emerald-100">
-                    Setiap Hari: 09.00 - 21.00 WIB
+                <h4 class="font-bold text-[#E0C097] text-xs uppercase tracking-wider">Informasi & Lokasi</h4>
+                <ul class="space-y-2 text-xs text-emerald-100/90">
+                    <li><a href="https://maps.app.goo.gl/i7ge5vpXZHDj5fn48" target="_blank" class="hover:underline flex items-start gap-1.5"><i class="fa-solid fa-location-dot text-[#C86D3B] mt-0.5"></i> <span>Ajibarang, Banyumas, Jawa Tengah</span></a></li>
+                    <li><a href="/tentang-kami" class="hover:underline">Tentang Kami</a></li>
+                </ul>
+            </div>
+            <div class="space-y-3">
+                <h4 class="font-bold text-[#E0C097] text-xs uppercase tracking-wider">Jam Buka</h4>
+                <p class="text-xs text-emerald-100/90 flex items-center gap-1.5">
+                    <i class="fa-regular fa-clock text-[#C86D3B]"></i> Setiap Hari: 09.00 - 21.00 WIB
                 </p>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto pt-6 text-center text-xs text-emerald-300">
+        <div class="max-w-7xl mx-auto pt-6 text-center text-xs text-emerald-300/70">
             &copy; 2026 Resto dan Lesehan Ulam Sari. Hak Cipta Dilindungi Undang-Undang.
         </div>
     </footer>

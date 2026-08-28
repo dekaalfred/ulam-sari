@@ -82,38 +82,40 @@
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-[#0D1C12] text-stone-300 py-12 px-8 md:px-16 mt-12">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
-            <div class="space-y-3">
-                <h3 class="font-serif text-xl font-bold text-white">Ulam Sari</h3>
-                <p class="text-stone-400 leading-relaxed">
-                    Essence of Javanese Tradition. Menyajikan kehangatan masakan rumahan dengan kualitas terbaik di Ajibarang.
+    <!-- FOOTER LENGKAP DENGAN INFORMASI LOKASI -->
+    <footer class="bg-[#0F2218] text-amber-100/80 pt-16 pb-8 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-emerald-800/60 text-sm">
+            <div class="space-y-4">
+                <h3 class="font-serif font-bold text-2xl text-[#E0C097]">Ulam Sari</h3>
+                <p class="text-emerald-200/80 text-xs leading-relaxed">
+                    Masakan khas Jawa tradisional. Menyajikan kehangatan masakan keluarga bernuansa keakraban di Ajibarang, Banyumas.
                 </p>
             </div>
-            <div>
-                <h4 class="font-bold text-white uppercase tracking-wider mb-4">Tautan</h4>
-                <ul class="space-y-2 text-stone-400">
-                    <li><a href="/" class="hover:text-white transition">Beranda</a></li>
-                    <li><a href="/menu" class="hover:text-white transition">Menu</a></li>
-                    <li><a href="/reservasi" class="hover:text-white transition">Reservasi</a></li>
+            <div class="space-y-3">
+                <h4 class="font-bold text-[#E0C097] text-xs uppercase tracking-wider">Tautan</h4>
+                <ul class="space-y-2 text-xs text-emerald-100/90">
+                    <li><a href="/" class="hover:underline">Beranda</a></li>
+                    <li><a href="/menu" class="hover:underline">Menu</a></li>
+                    <li><a href="/reservasi" class="hover:underline">Reservasi</a></li>
+                    <li><a href="/tentang-kami" class="hover:underline">Tentang Kami</a></li>
                 </ul>
             </div>
-            <div>
-                <h4 class="font-bold text-white uppercase tracking-wider mb-4">Informasi</h4>
-                <ul class="space-y-2 text-stone-400">
-                    <li><a href="#" class="hover:text-white transition">Lokasi</a></li>
-                    <li><a href="#" class="hover:text-white transition">Hubungi Kami</a></li>
-                    <li><a href="#" class="hover:text-white transition">Kebijakan Privasi</a></li>
+            <div class="space-y-3">
+                <h4 class="font-bold text-[#E0C097] text-xs uppercase tracking-wider">Informasi & Lokasi</h4>
+                <ul class="space-y-2 text-xs text-emerald-100/90">
+                    <li><a href="https://maps.app.goo.gl/i7ge5vpXZHDj5fn48" target="_blank" class="hover:underline flex items-start gap-1.5"><i class="fa-solid fa-location-dot text-[#C86D3B] mt-0.5"></i> <span>Ajibarang, Banyumas, Jawa Tengah</span></a></li>
+                    <li><a href="/tentang-kami" class="hover:underline">Tentang Kami</a></li>
                 </ul>
             </div>
-            <div>
-                <h4 class="font-bold text-white uppercase tracking-wider mb-4">Jam Buka</h4>
-                <p class="text-stone-400">Setiap Hari: 09.00 - 21.00 WIB</p>
+            <div class="space-y-3">
+                <h4 class="font-bold text-[#E0C097] text-xs uppercase tracking-wider">Jam Buka</h4>
+                <p class="text-xs text-emerald-100/90 flex items-center gap-1.5">
+                    <i class="fa-regular fa-clock text-[#C86D3B]"></i> Setiap Hari: 09.00 - 21.00 WIB
+                </p>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto border-t border-stone-800 mt-12 pt-6 text-[11px] text-stone-500">
-            © 2026 Warung Jawa Ulam Sari Bu AM Ajibarang. Essence of Javanese Tradition.
+        <div class="max-w-7xl mx-auto pt-6 text-center text-xs text-emerald-300/70">
+            &copy; 2026 Resto dan Lesehan Ulam Sari. Hak Cipta Dilindungi Undang-Undang.
         </div>
     </footer>
 
