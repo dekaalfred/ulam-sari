@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Reservasi & Pembayaran QRIS - Ulam Sari</title>
 
@@ -60,7 +61,6 @@
 
 
         <!-- TANYA ULAM AI -->
-        <!-- Menggunakan route yang sama dengan halaman Beranda -->
 
         <a href="{{ route('ai.index') }}"
            class="bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs md:text-sm px-4 py-2 rounded-full flex items-center gap-2 transition">
@@ -115,6 +115,23 @@
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-8">
 
             {{ session('success') }}
+
+        </div>
+
+    @endif
+
+
+    @if($errors->any())
+
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-8">
+
+            <p class="font-semibold text-sm mb-1">Terjadi kesalahan pada data Anda:</p>
+
+            <ul class="list-disc list-inside text-xs space-y-1">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
 
         </div>
 
@@ -236,7 +253,9 @@
 
                 <p class="text-xs text-gray-600 leading-relaxed mb-6">
 
-                    Lengkapi data reservasi Anda. Besaran DP akan menyesuaikan dengan jumlah meja yang dipesan.
+                    Lengkapi data reservasi Anda. DP wajib dibayarkan sebesar
+                    <span class="font-semibold text-[#B58A5B]">Rp10.000 per peserta</span>
+                    dan dihitung otomatis oleh sistem.
 
                 </p>
 
@@ -260,7 +279,7 @@
 
                             <i class="fa-solid fa-check text-green-700 mt-0.5"></i>
 
-                            Konfirmasi reservasi melalui sistem
+                            Konfirmasi reservasi otomatis melalui sistem
 
                         </li>
 
@@ -269,7 +288,7 @@
 
                             <i class="fa-solid fa-check text-green-700 mt-0.5"></i>
 
-                            Jumlah DP menyesuaikan meja
+                            DP = Rp10.000 &times; jumlah peserta
 
                         </li>
 
@@ -278,12 +297,40 @@
 
                             <i class="fa-solid fa-check text-green-700 mt-0.5"></i>
 
-                            Dapat berkonsultasi dengan admin
+                            Bukti reservasi tersimpan otomatis di sistem kami
+
+                        </li>
+
+
+                        <li class="flex items-start gap-2">
+
+                            <i class="fa-solid fa-check text-green-700 mt-0.5"></i>
+
+                            Dapat berkonsultasi dengan admin kapan saja
 
                         </li>
 
 
                     </ul>
+
+                </div>
+
+
+                <!-- ESTIMASI DP LIVE -->
+
+                <div class="mt-4 bg-white border border-[#E0C097] rounded-xl p-4">
+
+                    <p class="text-[10px] font-bold tracking-widest text-[#B58A5B] uppercase mb-1">
+                        Estimasi DP Saat Ini
+                    </p>
+
+                    <p id="dpPreview" class="text-2xl font-serif font-bold text-[#231512]">
+                        Rp0
+                    </p>
+
+                    <p class="text-[11px] text-gray-500 mt-1">
+                        Otomatis diperbarui sesuai jumlah peserta yang Anda masukkan.
+                    </p>
 
                 </div>
 
@@ -300,6 +347,7 @@
                     id="reservasiForm"
                     action="{{ route('reservasi.store') }}"
                     method="POST"
+                    enctype="multipart/form-data"
                     class="space-y-6">
 
                     @csrf
@@ -347,6 +395,8 @@
                                 name="nomor_whatsapp"
                                 placeholder="08xx xxxx xxxx"
                                 required
+                                pattern="^08[0-9]{8,12}$"
+                                title="Gunakan format nomor Indonesia, contoh: 081234567890"
                                 class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-black bg-transparent">
 
                         </div>
@@ -389,7 +439,12 @@
                                 placeholder="Contoh: 20"
                                 min="1"
                                 required
+                                oninput="updateDpPreview()"
                                 class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-black bg-transparent">
+
+                            <p class="text-[11px] text-gray-400 mt-1">
+                                DP dihitung Rp10.000 &times; jumlah peserta ini.
+                            </p>
 
                         </div>
 
@@ -464,6 +519,14 @@
 
 
 
+                    <!-- HIDDEN FIELDS UNTUK PEMBAYARAN -->
+
+                    <input type="hidden" id="nominal_dp" name="nominal_dp" value="0">
+                    <input type="hidden" id="metode_pembayaran" name="metode_pembayaran" value="Belum Dibayar">
+                    <input type="hidden" id="status_pembayaran" name="status_pembayaran" value="menunggu_konfirmasi">
+
+
+
                     <!-- INFORMASI DP -->
 
                     <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
@@ -480,9 +543,11 @@
 
                                 <p class="text-xs text-amber-800 mt-1 leading-relaxed">
 
-                                    Nominal DP tidak memiliki harga tetap.
-                                    Besaran DP akan menyesuaikan dengan jumlah meja yang Anda reservasi.
-                                    Silakan konfirmasi nominal DP kepada admin.
+                                    Setiap peserta wajib membayar DP sebesar
+                                    <strong>Rp10.000</strong>. Nominal total akan
+                                    dihitung otomatis berdasarkan jumlah peserta yang
+                                    Anda masukkan, dan akan ditampilkan sebelum Anda
+                                    melakukan pembayaran QRIS.
 
                                 </p>
 
@@ -507,7 +572,7 @@
 
                             <i class="fa-solid fa-paper-plane mr-2"></i>
 
-                            Kirim Data
+                            Kirim Data (Bayar Nanti)
 
                         </button>
 
@@ -643,6 +708,22 @@
 
 
 
+        <!-- NOMINAL DP BESAR -->
+
+        <div class="bg-[#231512] text-white rounded-xl py-3 px-4 mb-4">
+
+            <p class="text-[10px] uppercase tracking-widest text-amber-200/80">
+                Total DP yang Harus Dibayar
+            </p>
+
+            <p id="summaryDpBesar" class="text-2xl font-serif font-bold text-[#E0C097]">
+                Rp0
+            </p>
+
+        </div>
+
+
+
         <!-- SUMMARY -->
 
         <div class="bg-gray-50 p-4 rounded-xl text-left text-xs text-gray-700 mb-5 space-y-2 border border-gray-200">
@@ -688,6 +769,26 @@
 
 
 
+            <!-- PESERTA -->
+
+            <div class="flex justify-between gap-4">
+
+                <span>
+                    Jumlah Peserta:
+                </span>
+
+                <span
+                    id="summaryPeserta"
+                    class="font-semibold text-gray-900">
+
+                    -
+
+                </span>
+
+            </div>
+
+
+
             <!-- MEJA -->
 
             <div class="flex justify-between gap-4">
@@ -713,13 +814,14 @@
             <div class="flex justify-between gap-4">
 
                 <span>
-                    Nominal DP:
+                    Rincian DP:
                 </span>
 
                 <span
+                    id="summaryDpRincian"
                     class="font-semibold text-[#C86D3B] text-right">
 
-                    Menyesuaikan jumlah meja
+                    -
 
                 </span>
 
@@ -747,16 +849,42 @@
 
 
 
+        <!-- UPLOAD BUKTI TRANSFER -->
+
+        <div class="mb-4 text-left">
+
+            <label class="block text-xs font-bold text-gray-700 mb-2">
+                Upload Bukti Transfer <span class="text-red-500">*</span>
+            </label>
+
+            <input
+                type="file"
+                id="buktiTransfer"
+                name="bukti_transfer"
+                accept="image/*"
+                class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-[#F5EFEC] file:text-[#231512]">
+
+            <p class="text-[11px] text-gray-500 mt-1">
+                Screenshot bukti transfer wajib dilampirkan. Admin akan memverifikasi
+                pembayaran Anda secara manual sebelum reservasi dikonfirmasi.
+            </p>
+
+        </div>
+
+
+
         <!-- PERINGATAN -->
 
-        <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-left">
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-left">
 
-            <p class="text-xs text-red-700 leading-relaxed">
+            <p class="text-xs text-amber-800 leading-relaxed">
 
-                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+                <i class="fa-solid fa-circle-info mr-1"></i>
 
-                Nominal pembayaran belum ditentukan secara otomatis.
-                Silakan konfirmasi nominal DP kepada admin sebelum melakukan pembayaran.
+                Reservasi <strong>belum dianggap terkonfirmasi</strong> hanya karena Anda
+                menekan tombol ini. Status akan berubah menjadi
+                <strong>"Terkonfirmasi"</strong> setelah admin memeriksa dan
+                mencocokkan bukti transfer Anda.
 
             </p>
 
@@ -770,19 +898,20 @@
 
 
             <button
+                id="confirmPaymentBtn"
                 onclick="confirmPayment()"
-                class="w-full bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs py-3 rounded-lg font-medium transition shadow-sm">
+                class="w-full bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs py-3 rounded-lg font-medium transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed">
 
-                <i class="fa-solid fa-check mr-2"></i>
+                <i class="fa-solid fa-paper-plane mr-2"></i>
 
-                Saya Sudah Membayar
+                <span id="confirmPaymentBtnText">Kirim Bukti Pembayaran</span>
 
             </button>
 
 
 
             <button
-                onclick="paymentFailedSim()"
+                onclick="paymentCancelled()"
                 class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-2 rounded-lg font-medium transition">
 
                 Batalkan
@@ -823,8 +952,47 @@
 
         <p
             id="statusDesc"
-            class="text-xs text-gray-600 mb-6">
+            class="text-xs text-gray-600 mb-4">
         </p>
+
+
+        <!-- DETAIL RESERVASI SETELAH TERSIMPAN -->
+
+        <div
+            id="statusDetailBox"
+            class="hidden bg-gray-50 border border-gray-200 rounded-xl p-4 text-left text-xs text-gray-700 space-y-2 mb-5">
+
+            <div class="flex justify-between gap-4">
+                <span>Kode Reservasi:</span>
+                <span id="detailKode" class="font-semibold text-gray-900">-</span>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                <span>Nama:</span>
+                <span id="detailNama" class="font-semibold text-gray-900">-</span>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                <span>Tanggal Acara:</span>
+                <span id="detailTanggal" class="font-semibold text-gray-900">-</span>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                <span>Jumlah Peserta:</span>
+                <span id="detailPeserta" class="font-semibold text-gray-900">-</span>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                <span>Total DP Dibayar:</span>
+                <span id="detailDp" class="font-semibold text-[#C86D3B]">-</span>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                <span>Status:</span>
+                <span id="detailStatus" class="font-semibold text-amber-700">-</span>
+            </div>
+
+        </div>
 
 
         <button
@@ -1000,7 +1168,51 @@
 
 <script>
 
+    const DP_PER_ORANG = 10000; // Rp10.000 per peserta
+
     let timerInterval;
+
+
+
+    // ========================================================
+    // FORMAT RUPIAH
+    // ========================================================
+
+    function formatRupiah(angka) {
+
+        return 'Rp' + Number(angka).toLocaleString('id-ID');
+
+    }
+
+
+
+    // ========================================================
+    // HITUNG DP
+    // ========================================================
+
+    function hitungDp(jumlahPeserta) {
+
+        const peserta = parseInt(jumlahPeserta) || 0;
+
+        return peserta * DP_PER_ORANG;
+
+    }
+
+
+
+    // ========================================================
+    // UPDATE PREVIEW DP DI FORM (real-time)
+    // ========================================================
+
+    function updateDpPreview() {
+
+        const peserta = document.getElementById('peserta').value;
+
+        const dp = hitungDp(peserta);
+
+        document.getElementById('dpPreview').textContent = formatRupiah(dp);
+
+    }
 
 
 
@@ -1054,6 +1266,28 @@
         }
 
 
+        if (parseInt(peserta) < 1) {
+
+            alert('Jumlah peserta minimal 1 orang.');
+
+            return;
+
+        }
+
+
+
+        // Hitung DP
+
+        const dp = hitungDp(peserta);
+
+
+        // Simpan ke hidden input agar ikut terkirim saat submit
+
+        document.getElementById('nominal_dp').value = dp;
+
+        document.getElementById('metode_pembayaran').value = 'QRIS';
+
+
 
         // Isi data ke modal
 
@@ -1065,8 +1299,20 @@
             formatTanggal(tanggal);
 
 
+        document.getElementById('summaryPeserta').innerText =
+            peserta + ' orang';
+
+
         document.getElementById('summaryMeja').innerText =
             meja + ' meja';
+
+
+        document.getElementById('summaryDpRincian').innerText =
+            peserta + ' x ' + formatRupiah(DP_PER_ORANG) + ' = ' + formatRupiah(dp);
+
+
+        document.getElementById('summaryDpBesar').innerText =
+            formatRupiah(dp);
 
 
 
@@ -1204,48 +1450,188 @@
 
 
     // ========================================================
-    // KONFIRMASI PEMBAYARAN
+    // KONFIRMASI PEMBAYARAN -> KIRIM KE SERVER (DATABASE)
     // ========================================================
 
-    function confirmPayment() {
+    async function confirmPayment() {
 
 
-        closeQrisModal();
+        const btn = document.getElementById('confirmPaymentBtn');
+
+        const btnText = document.getElementById('confirmPaymentBtnText');
+
+        const form = document.getElementById('reservasiForm');
+
+        const buktiInput = document.getElementById('buktiTransfer');
 
 
-        document.getElementById('statusIcon').innerHTML =
-            '✅';
+        // Wajib lampirkan bukti transfer — klik tombol saja tidak cukup
+        // untuk mengklaim pembayaran sudah dilakukan.
+
+        if (!buktiInput.files || buktiInput.files.length === 0) {
+
+            alert('Mohon unggah screenshot bukti transfer terlebih dahulu sebelum melanjutkan.');
+
+            return;
+
+        }
 
 
-        document.getElementById('statusTitle').innerText =
-            'Data Pembayaran Diterima';
+        // Cegah klik ganda + tampilkan status loading
+
+        btn.disabled = true;
+
+        btnText.innerText = 'Mengirim bukti...';
 
 
-        document.getElementById('statusDesc').innerText =
-            'Terima kasih. Data reservasi dan informasi pembayaran Anda telah diterima. Admin akan melakukan pengecekan pembayaran dan mengonfirmasi reservasi melalui WhatsApp.';
+        try {
 
 
-
-        const modal =
-            document.getElementById('statusModal');
+            const formData = new FormData(form);
 
 
-        modal.classList.remove('hidden');
+            const response = await fetch(form.action, {
 
-        modal.classList.add('flex');
+                method: 'POST',
+
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+
+                body: formData
+
+            });
+
+
+            const data = await response.json().catch(() => null);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    (data && data.message)
+                        ? data.message
+                        : 'Gagal menyimpan reservasi. Silakan coba lagi.'
+                );
+
+            }
+
+
+            // SUKSES -> tampilkan detail dari respon server (jika ada),
+            // fallback ke data form bila server belum mengembalikan detail.
+
+            closeQrisModal();
+
+
+            document.getElementById('statusIcon').innerHTML =
+                '⏳';
+
+
+            document.getElementById('statusTitle').innerText =
+                'Bukti Pembayaran Terkirim';
+
+
+            document.getElementById('statusDesc').innerText =
+                'Data reservasi dan bukti transfer Anda telah tersimpan. Reservasi ini BELUM terkonfirmasi otomatis — admin akan memeriksa bukti transfer Anda terlebih dahulu dan mengonfirmasi melalui WhatsApp setelah pembayaran tervalidasi.';
+
+
+            const detail = (data && data.data) ? data.data : {};
+
+
+            document.getElementById('detailKode').innerText =
+                detail.kode_reservasi || detail.id || '-';
+
+
+            document.getElementById('detailNama').innerText =
+                detail.nama_lengkap || document.getElementById('nama').value;
+
+
+            document.getElementById('detailTanggal').innerText =
+                formatTanggal(document.getElementById('tanggal').value);
+
+
+            document.getElementById('detailPeserta').innerText =
+                (detail.jumlah_peserta || document.getElementById('peserta').value) + ' orang';
+
+
+            document.getElementById('detailDp').innerText =
+                formatRupiah(detail.nominal_dp || document.getElementById('nominal_dp').value);
+
+
+            document.getElementById('detailStatus').innerText =
+                'Menunggu Verifikasi Admin';
+
+
+            document.getElementById('statusDetailBox').classList.remove('hidden');
+
+
+            const statusModal =
+                document.getElementById('statusModal');
+
+
+            statusModal.classList.remove('hidden');
+
+            statusModal.classList.add('flex');
+
+
+        } catch (error) {
+
+
+            closeQrisModal();
+
+
+            document.getElementById('statusIcon').innerHTML =
+                '⚠️';
+
+
+            document.getElementById('statusTitle').innerText =
+                'Reservasi Belum Tersimpan';
+
+
+            document.getElementById('statusDesc').innerText =
+                error.message || 'Terjadi kesalahan saat menyimpan data. Silakan hubungi admin melalui WhatsApp.';
+
+
+            document.getElementById('statusDetailBox').classList.add('hidden');
+
+
+            const statusModal =
+                document.getElementById('statusModal');
+
+
+            statusModal.classList.remove('hidden');
+
+            statusModal.classList.add('flex');
+
+
+        } finally {
+
+
+            btn.disabled = false;
+
+            btnText.innerText = 'Kirim Bukti Pembayaran';
+
+
+        }
 
     }
 
 
 
     // ========================================================
-    // PEMBAYARAN DIBATALKAN
+    // PEMBAYARAN DIBATALKAN (tidak mengirim apapun ke server)
     // ========================================================
 
-    function paymentFailedSim() {
+    function paymentCancelled() {
 
 
         closeQrisModal();
+
+
+        document.getElementById('nominal_dp').value = 0;
+
+        document.getElementById('metode_pembayaran').value = 'Belum Dibayar';
 
 
         document.getElementById('statusIcon').innerHTML =
@@ -1257,7 +1643,10 @@
 
 
         document.getElementById('statusDesc').innerText =
-            'Pembayaran belum dilanjutkan. Silakan hubungi admin jika Anda membutuhkan informasi mengenai nominal DP.';
+            'Pembayaran belum dilanjutkan dan data belum tersimpan. Silakan ulangi proses reservasi jika ingin melanjutkan.';
+
+
+        document.getElementById('statusDetailBox').classList.add('hidden');
 
 
 
