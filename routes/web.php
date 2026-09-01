@@ -57,8 +57,14 @@ Route::post('/tanya-ai/chat', [UlamAiController::class, 'chat'])->name('ai.chat'
 // ROUTE PANEL ADMIN (Protected by Auth)
 // ==========================================
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('/menus', MenuController::class);
-    Route::resource('/reservations', ReservationController::class);
+Route::prefix('admin')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    
+    // API Routes for Admin SPA
+    Route::post('/api/login', [DashboardController::class, 'login']);
+    Route::post('/api/logout', [DashboardController::class, 'logout']);
+    Route::post('/api/menus', [DashboardController::class, 'storeMenu']);
+    Route::put('/api/menus/{id}', [DashboardController::class, 'updateMenu']);
+    Route::delete('/api/menus/{id}', [DashboardController::class, 'destroyMenu']);
+    Route::put('/api/reservations/{id}/status', [DashboardController::class, 'updateReservationStatus']);
 });
