@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Setiap baris = satu pesan dalam percakapan (baik dari customer maupun balasan AI).
+     */
+    public function up(): void
+    {
+        Schema::create('chatbot_messages', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('conversation_id')->constrained('chatbot_conversations')->cascadeOnDelete();
+            $table->enum('role', ['user', 'assistant']); // siapa pengirim pesan ini
+            $table->text('message');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('chatbot_messages');
+    }
+};
