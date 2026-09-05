@@ -8,8 +8,16 @@ use Illuminate\Support\Str;
 class Reservation extends Model
 {
     protected $fillable = [
-        'customer', 'date', 'time', 'guests', 'table_count',
-        'phone', 'notes', 'status', 'dp_amount', 'reservation_code',
+        'customer',
+        'date',
+        'time',
+        'guests',
+        'table_count',
+        'phone',
+        'notes',
+        'status',
+        'dp_amount',
+        'reservation_code',
     ];
 
     protected static function booted(): void
