@@ -8,20 +8,26 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('reservations', function (Blueprint $table) {
+        Schema::create('reservasis', function (Blueprint $table) {
             $table->id();
-            $table->string('customer');
-            $table->string('date');
-            $table->string('time');
-            $table->integer('guests')->default(1);
-            $table->string('phone')->nullable();
-            $table->enum('status', ['menunggu', 'dikonfirmasi', 'ditolak'])->default('menunggu');
+            $table->string('kode_reservasi')->unique()->nullable();
+            $table->string('nama_lengkap');
+            $table->string('nomor_whatsapp');
+            $table->date('tanggal_acara');
+            $table->time('waktu_acara');
+            $table->unsignedInteger('jumlah_peserta');
+            $table->unsignedInteger('jumlah_meja');
+            $table->text('catatan')->nullable();
+            $table->unsignedBigInteger('nominal_dp')->default(0);
+            $table->string('metode_pembayaran')->default('Belum Dibayar');
+            $table->string('status_pembayaran')->default('menunggu_konfirmasi');
+            $table->string('bukti_transfer')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        Schema::dropIfExists('reservasis');
     }
 };

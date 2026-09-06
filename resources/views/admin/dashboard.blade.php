@@ -31,7 +31,7 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', sans-serif;git status
       background: var(--color-bg);
       color: var(--color-text);
       min-height: 100vh;
