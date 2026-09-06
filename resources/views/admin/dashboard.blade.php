@@ -239,7 +239,6 @@ nav { flex: 1; padding: 10px 0; }
       display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
       background: rgba(62,39,35,0.05); border: 1px solid var(--color-border); color: var(--color-muted);
     }
-    .price { font-size: 13px; font-weight: 600; color: var(--color-secondary); }
     .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 5px; }
     .status-ok { color: var(--color-green); }
     .status-ok .status-dot { background: var(--color-green); }
@@ -555,6 +554,30 @@ nav { flex: 1; padding: 10px 0; }
     margin-left: 20px;
 }
 
+
+    /* ===== TABLE UI REFINEMENT ===== */
+    table { width:100%; border-collapse:separate; border-spacing:0; }
+    thead th { background:rgba(62,39,35,.035); color:var(--color-muted); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; padding:14px 16px; border-bottom:1px solid var(--color-border); }
+    tbody td { padding:15px 16px; border-bottom:1px solid rgba(62,39,35,.07); vertical-align:middle; }
+    tbody tr { transition:background .18s ease, transform .18s ease; }
+    tbody tr:hover { background:rgba(160,82,45,.035); }
+    tbody tr:last-child td { border-bottom:0; }
+    .menu-name { font-weight:700; color:var(--color-primary); font-size:14px; }
+    .menu-desc { margin-top:3px; color:var(--color-muted); font-size:11px; line-height:1.45; max-width:340px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .menu-thumb { width:48px; height:48px; flex:0 0 48px; border-radius:12px; overflow:hidden; background:#f1ece5; border:1px solid rgba(62,39,35,.08); box-shadow:0 3px 10px rgba(62,39,35,.06); }
+    .menu-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .cat-pill { display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; background:rgba(160,82,45,.08); color:var(--color-secondary); font-size:11px; font-weight:700; }
+    .action-btn { width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--color-border); border-radius:9px; background:#fff; color:var(--color-primary); transition:.18s ease; }
+    .action-btn:hover { transform:translateY(-1px); box-shadow:0 5px 14px rgba(62,39,35,.09); background:var(--color-card-hover); }
+    .action-btn.del { color:#b44b4b; }
+    .sort-select { min-height:40px; padding:0 36px 0 12px; border:1px solid var(--color-border); border-radius:10px; background:#fff; color:var(--color-primary); font-size:12px; font-weight:600; outline:none; }
+    .sort-select:focus { border-color:var(--color-secondary); box-shadow:0 0 0 3px rgba(160,82,45,.09); }
+    .nav-footer { border-top:1px solid var(--color-border); padding-top:12px; }
+    .nav-footer .nav-item { border-radius:10px; }
+    @media (max-width: 900px) {
+      thead th, tbody td { padding:12px 10px; }
+      .menu-desc { max-width:180px; }
+    }
   </style>
 </head>
 <body>
@@ -632,10 +655,6 @@ nav { flex: 1; padding: 10px 0; }
         Buat Pesanan Baru
       </button>
       <div class="nav-footer">
-        <button class="nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          Pengaturan
-        </button>
         <button class="nav-item nav-logout" onclick="doLogout()">
           <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
           Logout
@@ -825,7 +844,7 @@ nav { flex: 1; padding: 10px 0; }
                 class="page-sub"
                 style="margin-bottom:0;"
             >
-                Kelola hidangan, harga, dan ketersediaan menu restoran.
+                Kelola hidangan, kategori, dan ketersediaan menu restoran.
             </div>
 
         </div>
@@ -879,8 +898,6 @@ nav { flex: 1; padding: 10px 0; }
 
             <option>Terbaru</option>
             <option>Nama A-Z</option>
-            <option>Harga Tertinggi</option>
-            <option>Harga Terendah</option>
 
         </select>
 
@@ -910,7 +927,6 @@ nav { flex: 1; padding: 10px 0; }
 
                     <th>Menu Item</th>
                     <th>Kategori</th>
-                    <th>Harga</th>
                     <th>Status</th>
                     <th>Aksi</th>
 
@@ -1214,8 +1230,6 @@ function getMenus() {
   let d = catFilter==='Semua' ? [...menus] : menus.filter(m=>m.cat===catFilter);
   const s = document.getElementById('menu-sort')?.value||'Terbaru';
   if (s==='Nama A-Z') d.sort((a,b)=>a.name.localeCompare(b.name));
-  else if (s==='Harga Tertinggi') d.sort((a,b)=>b.price-a.price);
-  else if (s==='Harga Terendah') d.sort((a,b)=>a.price-b.price);
   else d.sort((a,b)=>b.id-a.id);
   return d;
 }
@@ -1236,7 +1250,6 @@ function renderMenuTable() {
         </div>
       </td>
       <td><span class="cat-pill">${m.cat}</span></td>
-      <td class="price">Rp ${Number(m.price).toLocaleString('id-ID')}</td>
 <td>
   <button onclick="toggleMenuStatus(${m.id})" class="${m.status==='tersedia'?'status-ok':'status-bad'}" style="display:flex;align-items:center;font-size:12px;font-weight:500;background:none;border:none;cursor:pointer;padding:0;">
     <span class="status-dot"></span>${m.status==='tersedia'?'Tersedia':'Habis'}
