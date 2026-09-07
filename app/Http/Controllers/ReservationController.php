@@ -12,47 +12,84 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_lengkap'   => 'required|string|max:255',
+            'nama_lengkap' => 'required|string|max:255',
             'nomor_whatsapp' => 'required|numeric|digits_between:10,14',
-            'tanggal_acara'  => 'required|date',
+            'tanggal_acara' => 'required|date',
             'jumlah_peserta' => 'required|integer|min:1',
-            'jumlah_meja'    => 'required|integer|min:1',
-            'waktu_acara'    => 'required',
-            'catatan'        => 'nullable|string',
+            'jumlah_meja' => 'required|integer|min:1',
+            'waktu_acara' => 'required',
+            'catatan' => 'nullable|string',
             'bukti_transfer' => 'required|image|max:4096',
         ]);
 
         $dpPerPeserta = (int) Setting::get('dp_per_peserta', 10000);
+
         $dpAmount = $dpPerPeserta * (int) $validated['jumlah_peserta'];
 
         $reservation = Reservation::create([
-            'customer'     => $validated['nama_lengkap'],
-            'date'         => $validated['tanggal_acara'],
-            'time'         => $validated['waktu_acara'],
-            'guests'       => $validated['jumlah_peserta'],
-            'table_count'  => $validated['jumlah_meja'],
-            'phone'        => $validated['nomor_whatsapp'],
-            'notes'        => $validated['catatan'] ?? null,
-            'dp_amount'    => $dpAmount,
-            'status'       => 'menunggu',
+            'customer' => $validated['nama_lengkap'],
+            'date' => $validated['tanggal_acara'],
+            'time' => $validated['waktu_acara'],
+            'guests' => $validated['jumlah_peserta'],
+            'table_count' => $validated['jumlah_meja'],
+            'phone' => $validated['nomor_whatsapp'],
+            'notes' => $validated['catatan'] ?? null,
+            'dp_amount' => $dpAmount,
+            'status' => 'menunggu',
         ]);
 
-        $proofPath = $request->file('bukti_transfer')->store('bukti-transfer', 'public');
+        $proofPath = $request
+            ->file('bukti_transfer')
+            ->store('bukti-transfer', 'public');
 
         ReservationPayment::create([
             'reservation_id' => $reservation->id,
             'payment_method' => 'manual',
-            'amount'         => $dpAmount,
-            'payment_proof'  => $proofPath,
-            'status'         => 'pending',
+            'amount' => $dpAmount,
+            'payment_proof' => $proofPath,
+            'status' => 'pending',
         ]);
 
-return response()->json([
-    'message' => 'Reservasi berhasil disimpan',
-    'data' => [
-        'kode_reservasi' => $reservation->reservation_code,
-        'nama_lengkap'   => $reservation->customer,
-        'jumlah_peserta' => $reservation->guests,
-        'nominal_dp'     => $reservation->dp_amount,
-    ],
-], 201);}}
+        return response()->json([
+            'message' => 'Reservasi berhasil disimpan',
+            'data' => [
+                'kode_reservasi' => $reservation->reservation_code,
+                'nama_lengkap' => $reservation->customer,
+                'jumlah_peserta' => $reservation->guests,
+                'nominal_dp' => $reservation->dp_amount,
+            ],
+        ], 201);
+    }
+
+
+    public function cekKetersediaan(Request $request)
+    {
+        $validated = $request->validate([
+            'tanggal_acara' => 'required|date',
+            'jumlah_meja' => 'required|integer|min:1',
+        ]);
+
+        $reservasiTerpakai = Reservation::whereDate(
+            'date',
+            $validated['tanggal_acara']
+        )
+        ->whereIn('status', ['menunggu', 'dikonfirmasi'])
+        ->sum('table_count');
+
+        // CONTOH: total meja restoran
+        $totalMeja = 20;
+
+        $mejaTersedia = $totalMeja - $reservasiTerpakai;
+
+        $tersedia = $mejaTersedia >= $validated['jumlah_meja'];
+
+        return response()->json([
+            'success' => true,
+            'tersedia' => $tersedia,
+            'meja_tersedia' => max($mejaTersedia, 0),
+            'message' => $tersedia
+                ? 'Meja tersedia'
+                : 'Jumlah meja tidak mencukupi',
+        ]);
+    }
+}

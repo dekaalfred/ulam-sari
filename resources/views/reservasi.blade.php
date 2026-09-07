@@ -407,13 +407,19 @@
                             <div>
                                 <label for="whatsapp" class="block text-xs font-bold text-gray-700 mb-2">Nomor WhatsApp</label>
                                 <input
-                                    type="text" id="whatsapp" name="nomor_whatsapp"
-                                    placeholder="08xx xxxx xxxx" required
+                                    type="tel"
+                                    id="whatsapp"
+                                    name="nomor_whatsapp"
+                                    placeholder="08xx xxxx xxxx"
+                                    required
+                                    maxlength="14"
+                                    minlength="10"
+                                    inputmode="numeric"
                                     pattern="^08[0-9]{8,12}$"
-                                    onblur="validateField('whatsapp')" oninput="clearFieldError('whatsapp')"
+                                    onblur="validateField('whatsapp')"
+                                    oninput="clearFieldError('whatsapp')"
                                     class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-[#C86D3B] bg-transparent transition-colors">
-                                <p id="errWhatsapp" class="text-[11px] text-red-600 mt-1 hidden"></p>
-                            </div>
+                            <p id="errWhatsapp" class="text-[11px] text-red-600 mt-1 hidden"></p>
 
                         </div>
                     </div>

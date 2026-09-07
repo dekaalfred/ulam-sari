@@ -1254,7 +1254,8 @@ function renderMenuTable() {
   <button onclick="toggleMenuStatus(${m.id})" class="${m.status==='tersedia'?'status-ok':'status-bad'}" style="display:flex;align-items:center;font-size:12px;font-weight:500;background:none;border:none;cursor:pointer;padding:0;">
     <span class="status-dot"></span>${m.status==='tersedia'?'Tersedia':'Habis'}
   </button>
-</td>      <td>
+</td>   
+   <td>
         <div style="display:flex;gap:6px;">
           <button class="action-btn" onclick="editMenu(${m.id})" aria-label="Edit" title="Edit">
             <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
@@ -1450,22 +1451,49 @@ async function saveMenu() {
 
 function editMenu(id) { openMenuModal(id); }
 async function toggleMenuStatus(id) {
-  try {
-    const res = await fetch(`/admin/api/menus/${id}/toggle`, {
-      method: 'PATCH',
-      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
-    });
-    const resData = await res.json();
-    if (res.ok && resData.success) {
-      const i = menus.findIndex(m => m.id === id);
-      menus[i] = resData.data;
-      renderMenuTable();
-    }
-  } catch (e) {
-    alert('Gagal ubah status menu.');
-  }
-}
+    try {
 
+        const response = await fetch(
+            `/admin/menus/${id}/toggle-status`,
+            {
+                method: 'PATCH',
+
+                headers: {
+                    'X-CSRF-TOKEN': document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute('content'),
+
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            console.error(result);
+            alert('Terjadi kesalahan saat mengubah status menu');
+            return;
+        }
+
+        // UPDATE DATA MENU DI JAVASCRIPT
+        const menu = menus.find(menu => menu.id == id);
+
+        if (menu) {
+            menu.status = result.status;
+        }
+
+        // RENDER ULANG TABEL
+        renderMenuTable();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert('Terjadi kesalahan saat mengubah status menu');
+
+    }
+}
 async function deleteMenu(id) {
   if (!confirm('Hapus menu ini?')) return;
   try {

@@ -1,14 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+use App\Models\Menu;
+
 use App\Http\Controllers\UlamAiController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ReservationController as PublicReservationController;
+
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\Admin\ReservationController;
+use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
 
-// ==========================================
 // ROUTE AUTENTIKASI (LOGIN & LOGOUT)
 // ==========================================
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -22,27 +24,30 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return view('welcome');
-});
-
+}); 
 Route::get('/menu', function () {
-    return view('menu');
+
+    $menus = Menu::where('status', 'tersedia')->get();
+
+    $menusByCategory = $menus->groupBy('cat');
+
+    return view('menu', compact('menusByCategory'));
+
 });
 
 Route::get('/reservasi', function () {
     return view('reservasi');
 })->name('reservasi');
 
-Route::post('/reservasi', function (Request $request) {
-    $validated = $request->validate([
-        'nama_lengkap'   => 'required|string|max:255',
-        'nomor_whatsapp' => 'required|numeric',
-        'tanggal_acara'  => 'required|date',
-        'jumlah_peserta' => 'required|integer|min:10',
-        'catatan'        => 'nullable|string',
-    ]);
+Route::post('/reservasi', [
+    PublicReservationController::class,
+    'store'
+])->name('reservasi.store');
 
-    return back()->with('success', 'Reservasi berhasil dikirim!');
-})->name('reservasi.store');
+Route::get('/reservasi/cek-ketersediaan', [
+    PublicReservationController::class,
+    'cekKetersediaan'
+])->name('reservasi.cek');
 
 Route::get('/tentang-kami', function () {
     return view('tentang-kami');
@@ -52,15 +57,31 @@ Route::get('/tentang-kami', function () {
 Route::get('/tanya-ai', [UlamAiController::class, 'index'])->name('ai.index');
 Route::post('/tanya-ai/chat', [UlamAiController::class, 'chat'])->name('ai.chat');
 
-
 // ==========================================
-// ROUTE PANEL ADMIN (Protected by Auth)
+// ROUTE PANEL ADMIN
 // ==========================================
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('/menus', MenuController::class);
-    Route::resource('/reservations', ReservationController::class);
-});
-Route::get('/reservasi/cek-ketersediaan', [ReservasiController::class, 'cekKetersediaan'])
-    ->name('reservasi.cek');
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/dashboard', [
+            DashboardController::class,
+            'index'
+        ])->name('dashboard');
+
+        Route::patch('/menus/{id}/toggle-status', [
+            MenuController::class,
+            'toggleStatus'
+        ])->name('menus.toggle-status');
+
+        Route::resource('/menus', MenuController::class);
+
+        Route::resource(
+            '/reservations',
+            AdminReservationController::class
+        );
+
+    });
+    
