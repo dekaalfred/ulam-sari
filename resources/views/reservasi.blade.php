@@ -608,73 +608,77 @@
 
 <div id="qrisModal" class="overlay-enter fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4">
 
-    <div class="sheet-enter bg-white rounded-2xl max-w-md w-full p-6 text-center relative shadow-2xl border border-gray-100">
+    <div class="sheet-enter bg-white rounded-2xl max-w-md w-full max-h-[90vh] relative shadow-2xl border border-gray-100 flex flex-col overflow-hidden">
 
-        <button onclick="closeQrisModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black">
+        <button onclick="closeQrisModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black z-10 bg-white/80 rounded-full w-7 h-7 flex items-center justify-center">
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
 
-        <div class="flex items-center justify-center gap-2 mb-1">
-            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wide">Official QRIS</span>
-        </div>
+        <div class="p-6 text-center overflow-y-auto">
 
-        <h3 class="font-serif text-xl font-bold text-[#2D1A12]">Warung Jawa Ulam Sari</h3>
+            <div class="flex items-center justify-center gap-2 mb-1">
+                <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wide">Official QRIS</span>
+            </div>
 
-        <p class="text-xs text-gray-500 mb-3">
-            Scan kode QR di bawah menggunakan BCA, Mandiri, OVO, GoPay, Dana, dan aplikasi pembayaran lainnya.
-        </p>
+            <h3 class="font-serif text-xl font-bold text-[#2D1A12]">Warung Jawa Ulam Sari</h3>
 
-        <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-lg py-1.5 px-3 text-xs mb-4 flex items-center justify-center gap-2 font-medium">
-            <i class="fa-regular fa-clock"></i> Waktu pembayaran: <span id="countdown" class="font-bold text-red-600">05:00</span>
-        </div>
-
-        <div class="bg-white p-3 rounded-xl inline-block mb-3 border-2 border-dashed border-gray-300 shadow-inner">
-            <img src="{{ asset('images/Qris.png') }}" alt="QRIS Ulam Sari" class="w-48 h-48 mx-auto object-contain rounded-md">
-        </div>
-
-        <div class="bg-[#231512] text-white rounded-xl py-3 px-4 mb-4">
-            <p class="text-[10px] tracking-widest text-amber-200/80">Total DP yang Harus Dibayar</p>
-            <p id="summaryDpBesar" class="text-2xl font-serif font-bold text-[#E0C097]">Rp0</p>
-        </div>
-
-        <div class="bg-gray-50 p-4 rounded-xl text-left text-xs text-gray-700 mb-5 space-y-2 border border-gray-200">
-            <div class="flex justify-between gap-4"><span>Nama Pemesan:</span><span id="summaryNama" class="font-semibold text-gray-900 text-right">-</span></div>
-            <div class="flex justify-between gap-4"><span>Tanggal:</span><span id="summaryTanggal" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Jam Reservasi:</span><span id="summaryWaktu" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Jumlah Peserta:</span><span id="summaryPeserta" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Jumlah Meja:</span><span id="summaryMeja" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Rincian DP:</span><span id="summaryDpRincian" class="font-semibold text-[#C86D3B] text-right">-</span></div>
-            <div class="flex justify-between gap-4"><span>Metode:</span><span class="font-semibold">QRIS</span></div>
-        </div>
-
-        <div class="mb-4 text-left">
-            <label class="block text-xs font-bold text-gray-700 mb-2">Upload Bukti Transfer <span class="text-red-500">*</span></label>
-            <input type="file" id="buktiTransfer" name="bukti_transfer" accept="image/*"
-                class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-[#F5EFEC] file:text-[#231512]">
-            <p class="text-[11px] text-gray-500 mt-1">
-                Screenshot bukti transfer wajib dilampirkan. Admin akan memverifikasi pembayaran Anda secara manual sebelum reservasi dikonfirmasi.
+            <p class="text-xs text-gray-500 mb-3">
+                Scan kode QR di bawah menggunakan BCA, Mandiri, OVO, GoPay, Dana, dan aplikasi pembayaran lainnya.
             </p>
-        </div>
 
-        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-left">
-            <p class="text-xs text-amber-800 leading-relaxed">
-                <i class="fa-solid fa-circle-info mr-1"></i>
-                Reservasi <strong>belum dianggap terkonfirmasi</strong> hanya karena Anda menekan tombol ini.
-                Status akan berubah menjadi <strong>"Terkonfirmasi"</strong> setelah admin memeriksa dan mencocokkan bukti transfer Anda.
-            </p>
-        </div>
+            <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-lg py-1.5 px-3 text-xs mb-4 flex items-center justify-center gap-2 font-medium">
+                <i class="fa-regular fa-clock"></i> Waktu pembayaran: <span id="countdown" class="font-bold text-red-600">05:00</span>
+            </div>
 
-        <div class="space-y-2">
-            <button id="confirmPaymentBtn" onclick="confirmPayment()"
-                class="w-full bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs py-3 rounded-lg font-medium transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                <i id="confirmPaymentIcon" class="fa-solid fa-paper-plane"></i>
-                <span id="confirmPaymentBtnText">Kirim Bukti Pembayaran</span>
-            </button>
+            <div class="bg-white p-3 rounded-xl inline-block mb-3 border-2 border-dashed border-gray-300 shadow-inner">
+                <img src="{{ asset('images/Qris.png') }}" alt="QRIS Ulam Sari" class="w-48 h-48 mx-auto object-contain rounded-md">
+            </div>
 
-            <button onclick="paymentCancelled()"
-                class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-2 rounded-lg font-medium transition">
-                Batalkan
-            </button>
+            <div class="bg-[#231512] text-white rounded-xl py-3 px-4 mb-4">
+                <p class="text-[10px] tracking-widest text-amber-200/80">Total DP yang Harus Dibayar</p>
+                <p id="summaryDpBesar" class="text-2xl font-serif font-bold text-[#E0C097]">Rp0</p>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-xl text-left text-xs text-gray-700 mb-5 space-y-2 border border-gray-200">
+                <div class="flex justify-between gap-4"><span>Nama Pemesan:</span><span id="summaryNama" class="font-semibold text-gray-900 text-right">-</span></div>
+                <div class="flex justify-between gap-4"><span>Tanggal:</span><span id="summaryTanggal" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Jam Reservasi:</span><span id="summaryWaktu" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Jumlah Peserta:</span><span id="summaryPeserta" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Jumlah Meja:</span><span id="summaryMeja" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Rincian DP:</span><span id="summaryDpRincian" class="font-semibold text-[#C86D3B] text-right">-</span></div>
+                <div class="flex justify-between gap-4"><span>Metode:</span><span class="font-semibold">QRIS</span></div>
+            </div>
+
+            <div class="mb-4 text-left">
+                <label class="block text-xs font-bold text-gray-700 mb-2">Upload Bukti Transfer <span class="text-red-500">*</span></label>
+                <input type="file" id="buktiTransfer" name="bukti_transfer" accept="image/*"
+                    class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-[#F5EFEC] file:text-[#231512]">
+                <p class="text-[11px] text-gray-500 mt-1">
+                    Screenshot bukti transfer wajib dilampirkan. Admin akan memverifikasi pembayaran Anda secara manual sebelum reservasi dikonfirmasi.
+                </p>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-left">
+                <p class="text-xs text-amber-800 leading-relaxed">
+                    <i class="fa-solid fa-circle-info mr-1"></i>
+                    Reservasi <strong>belum dianggap terkonfirmasi</strong> hanya karena Anda menekan tombol ini.
+                    Status akan berubah menjadi <strong>"Terkonfirmasi"</strong> setelah admin memeriksa dan mencocokkan bukti transfer Anda.
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <button id="confirmPaymentBtn" onclick="confirmPayment()"
+                    class="w-full bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs py-3 rounded-lg font-medium transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    <i id="confirmPaymentIcon" class="fa-solid fa-paper-plane"></i>
+                    <span id="confirmPaymentBtnText">Kirim Bukti Pembayaran</span>
+                </button>
+
+                <button onclick="paymentCancelled()"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-2 rounded-lg font-medium transition">
+                    Batalkan
+                </button>
+            </div>
+
         </div>
 
     </div>
@@ -687,24 +691,28 @@
 
 <div id="statusModal" class="overlay-enter fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4">
 
-    <div class="sheet-enter bg-white rounded-2xl max-w-sm w-full p-6 text-center relative shadow-xl">
+    <div class="sheet-enter bg-white rounded-2xl max-w-sm w-full max-h-[90vh] relative shadow-xl flex flex-col overflow-hidden">
 
-        <div id="statusIcon" class="text-5xl mb-3"></div>
-        <h3 id="statusTitle" class="font-serif text-xl font-bold mb-2"></h3>
-        <p id="statusDesc" class="text-xs text-gray-600 mb-4"></p>
+        <div class="p-6 text-center overflow-y-auto">
 
-        <div id="statusDetailBox" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-4 text-left text-xs text-gray-700 space-y-2 mb-5">
-            <div class="flex justify-between gap-4"><span>Kode Reservasi:</span><span id="detailKode" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Nama:</span><span id="detailNama" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Tanggal Acara:</span><span id="detailTanggal" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Jumlah Peserta:</span><span id="detailPeserta" class="font-semibold text-gray-900">-</span></div>
-            <div class="flex justify-between gap-4"><span>Total DP Dibayar:</span><span id="detailDp" class="font-semibold text-[#C86D3B]">-</span></div>
-            <div class="flex justify-between gap-4"><span>Status:</span><span id="detailStatus" class="font-semibold text-amber-700">-</span></div>
+            <div id="statusIcon" class="text-5xl mb-3"></div>
+            <h3 id="statusTitle" class="font-serif text-xl font-bold mb-2"></h3>
+            <p id="statusDesc" class="text-xs text-gray-600 mb-4"></p>
+
+            <div id="statusDetailBox" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-4 text-left text-xs text-gray-700 space-y-2 mb-5">
+                <div class="flex justify-between gap-4"><span>Kode Reservasi:</span><span id="detailKode" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Nama:</span><span id="detailNama" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Tanggal Acara:</span><span id="detailTanggal" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Jumlah Peserta:</span><span id="detailPeserta" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Total DP Dibayar:</span><span id="detailDp" class="font-semibold text-[#C86D3B]">-</span></div>
+                <div class="flex justify-between gap-4"><span>Status:</span><span id="detailStatus" class="font-semibold text-amber-700">-</span></div>
+            </div>
+
+            <button onclick="closeStatusModal()" class="w-full bg-[#2D1A12] text-white text-xs py-2.5 rounded-lg font-medium">
+                OK / Selesai
+            </button>
+
         </div>
-
-        <button onclick="closeStatusModal()" class="w-full bg-[#2D1A12] text-white text-xs py-2.5 rounded-lg font-medium">
-            OK / Selesai
-        </button>
 
     </div>
 </div>
