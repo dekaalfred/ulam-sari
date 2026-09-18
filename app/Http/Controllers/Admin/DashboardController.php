@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Reservation;
 use App\Models\Activity;
+use App\Models\ReservationPayment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;  
 
 class DashboardController extends Controller
 {
@@ -58,20 +59,33 @@ class DashboardController extends Controller
     }
 
     // CRUD Menu
+    private function saveBase64Image(string $base64): string
+{
+    [$meta, $data] = explode(',', $base64, 2);
+    preg_match('/data:image\/(\w+);base64/', $meta, $matches);
+    $extension = $matches[1] ?? 'png';
 
-    public function storeMenu(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'desc' => 'nullable|string',
-            'cat' => 'required|string',
-            'price' => 'required|numeric',
-            'status' => 'required|in:tersedia,habis',
-            'image' => 'nullable|string',
-        ]);
+    $filename = 'images/menu-' . uniqid() . '.' . $extension;
+    file_put_contents(public_path($filename), base64_decode($data));
 
-        $menu = Menu::create($validated);
+    return $filename;
+}
+public function storeMenu(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'desc' => 'nullable|string',
+        'cat' => 'required|string',
+        'price' => 'required|numeric',
+        'status' => 'required|in:tersedia,habis',
+        'image' => 'nullable|string',
+    ]);
 
+    if (!empty($validated['image']) && str_starts_with($validated['image'], 'data:image')) {
+        $validated['image'] = $this->saveBase64Image($validated['image']);
+    }
+
+    $menu = Menu::create($validated);
         Activity::create([
             'dot' => 'dot-orange',
             'text' => 'Menu Ditambahkan: ' . $menu->name,
@@ -98,8 +112,11 @@ class DashboardController extends Controller
             'image' => 'nullable|string',
         ]);
 
-        $menu->update($validated);
+        if (!empty($validated['image']) && str_starts_with($validated['image'], 'data:image')) {
+            $validated['image'] = $this->saveBase64Image($validated['image']);
+        }
 
+        $menu->update($validated);
         Activity::create([
             'dot' => 'dot-muted',
             'text' => 'Menu Diperbarui: ' . $menu->name,
@@ -165,5 +182,35 @@ class DashboardController extends Controller
             'success' => true,
             'data' => $menu
         ]);
+    }
+    
+    public function verifyPayment(Request $request, $paymentId)
+    {
+    $validated = $request->validate([
+        'action' => 'required|in:approve,reject',
+    ]);
+
+    $payment = ReservationPayment::with('reservation')->findOrFail($paymentId);
+
+    if ($validated['action'] === 'approve') {
+        $payment->update([
+            'status'      => 'paid',
+            'verified_by' => Auth::id(),
+            'paid_at'     => now(),
+        ]);
+        $payment->reservation->update(['status' => 'dikonfirmasi']);
+
+        Activity::create([
+            'dot' => 'dot-orange',
+            'text' => 'Pembayaran Diverifikasi: ' . $payment->reservation->customer,
+            'sub' => 'Rp ' . number_format($payment->amount, 0, ',', '.'),
+            'time_label' => 'Baru saja',
+        ]);
+    } else {
+        $payment->update(['status' => 'rejected', 'verified_by' => Auth::id()]);
+        $payment->reservation->update(['status' => 'ditolak']);
+    }
+
+    return response()->json(['success' => true, 'data' => $payment]);
     }
 }

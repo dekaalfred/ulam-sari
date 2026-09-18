@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'dot' => 'dot-muted',
-                'text' => 'Menu Updated',
+                'text' => 'Menu6 Updated',
                 'sub' => 'Updated by Admin',
                 'time_label' => '1h ago'
             ],
@@ -71,5 +71,19 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now()
             ]));
         }
+        
+        $firstReservation = \App\Models\Reservation::first();
+        if ($firstReservation) {
+        \App\Models\ReservationPayment::updateOrCreate(
+        ['reservation_id' => $firstReservation->id],
+        ['payment_method' => 'manual', 'amount' => 100000, 'status' => 'pending']
+        );
+        }
+
+        DB::table('settings')->updateOrInsert(
+        ['key' => 'dp_per_peserta'],
+        ['value' => '10000', 'created_at' => now(), 'updated_at' => now()]
+        );
     }
+    
 }

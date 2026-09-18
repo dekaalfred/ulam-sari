@@ -39,4 +39,13 @@ return [
         'api_key' => env('GEMINI_API_KEY'),
     ],
 
+
+    'midtrans' => [
+    'server_key'     => env('MMIDTRANS_SERVER_KEY=Mid-server-aQD4r8ewPXIavaLVBrmC1aja'),
+    'client_key'     => env('MIDTRANS_CLIENT_KEY=Mid-client-AFTBERleT2axgPSy'),
+    'is_production'  => env('MIDTRANS_IS_PRODUCTION', false),
+    'is_sanitized'   => true,
+    'is_3ds'         => true,
+    ],
+
 ];

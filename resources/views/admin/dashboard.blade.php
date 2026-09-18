@@ -139,7 +139,7 @@ nav { flex: 1; padding: 10px 0; }
     .page-sub { font-size: 13px; color: var(--color-muted); margin-bottom: 24px; }
 
     /* STAT CARDS */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
     .stat-card {
       padding: 20px 24px;
       background: var(--color-card);
@@ -760,45 +760,10 @@ nav { flex: 1; padding: 10px 0; }
             </div>
 
         </div>
+    <!-- END activity-card -->
 
 
-        <!-- VISITORS -->
-        <div class="stat-card">
-
-            <div class="stat-badge badge-muted">
-                +15% vs Yesterday
-            </div>
-
-            <div class="stat-icon stat-icon-muted">
-
-                <svg
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.25 0 015.25 0z"
-                    />
-                </svg>
-
-            </div>
-
-            <div class="stat-number">
-                342
-            </div>
-
-            <div class="stat-label">
-                Today's Visitors
-            </div>
-
-        </div>
-
-    </div>
-    <!-- END stats-grid -->
-
+</div>
 
     <!-- RECENT ACTIVITY -->
     <div class="activity-card">
@@ -819,11 +784,8 @@ nav { flex: 1; padding: 10px 0; }
         ></div>
 
     </div>
-    <!-- END activity-card -->
 
-
-</div>
-
+    </div>
 <!-- ================================= -->
 <!-- END CONTENT DASHBOARD             -->
 <!-- ================================= -->
@@ -1132,18 +1094,89 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !document.getElementById('page-login').classList.contains('hidden')) doLogin();
 });
 
-// =========== NAV ===========
-function showPage(page) {
-  ['dashboard','menu','reservasi'].forEach(p => {
-    document.getElementById('content-'+p).classList.toggle('hidden', p !== page);
-    const n = document.getElementById('nav-'+p);
-    if (n) { n.classList.toggle('active', p === page); }
-  });
-  if (page === 'dashboard') { renderActivity(); animateIn('.stat-card, .activity-card'); }
-  if (page === 'menu') { buildCatTabs(); renderMenuTable(); }
-  if (page === 'reservasi') { renderReservasi(); }
+async function loadReservations() {
+
+    const grid = document.getElementById('reservasi-grid');
+
+    grid.innerHTML = `
+        <div style="
+            grid-column:1/-1;
+            text-align:center;
+            padding:60px 0;
+            color:var(--color-muted);
+        ">
+            Memuat data reservasi...
+        </div>
+    `;
+
+    try {
+
+        const res = await fetch('/admin/api/reservations', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            credentials: 'same-origin'
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+            throw new Error(
+                data.message || 'Gagal mengambil data reservasi.'
+            );
+        }
+
+        reservations = data.data || [];
+
+        renderReservasi();
+
+    } catch (error) {
+
+        console.error('Load reservations error:', error);
+
+        grid.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:60px 0;
+                color:var(--color-red);
+            ">
+                Gagal mengambil data reservasi.
+            </div>
+        `;
+    }
 }
 
+// =========== NAV ===========
+function showPage(page) {
+
+    ['dashboard','menu','reservasi'].forEach(p => {
+        document
+            .getElementById('content-' + p)
+            .classList.toggle('hidden', p !== page);
+
+        const n = document.getElementById('nav-' + p);
+
+        if (n) {
+            n.classList.toggle('active', p === page);
+        }
+    });
+
+    if (page === 'dashboard') {
+        renderActivity();
+        animateIn('.stat-card, .activity-card');
+    }
+
+    if (page === 'menu') {
+        buildCatTabs();
+        renderMenuTable();
+    }
+
+    if (page === 'reservasi') {
+        loadReservations();
+    }
+}
 // =========== GSAP ===========
 function animateIn(selector) {
   if (!window.gsap) return;
@@ -1453,8 +1486,8 @@ function editMenu(id) { openMenuModal(id); }
 async function toggleMenuStatus(id) {
     try {
 
-        const response = await fetch(
-            `/admin/menus/${id}/toggle-status`,
+        const response = await 
+        fetch(`/admin/api/menus/${id}/toggle`,
             {
                 method: 'PATCH',
 
@@ -1479,9 +1512,9 @@ async function toggleMenuStatus(id) {
         // UPDATE DATA MENU DI JAVASCRIPT
         const menu = menus.find(menu => menu.id == id);
 
-        if (menu) {
-            menu.status = result.status;
-        }
+       if (menu) {
+    menu.status = result.data.status;
+}
 
         // RENDER ULANG TABEL
         renderMenuTable();
