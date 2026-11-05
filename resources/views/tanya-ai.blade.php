@@ -16,10 +16,8 @@
 <body class="bg-[#FAF8F5] text-[#2C2C2C] font-sans antialiased min-h-screen flex flex-col justify-between">
 
     <!-- NAVBAR -->
-    <nav class="bg-[#FAF8F5] border-b border-stone-200/50 relative z-50">
-        <div class="max-w-7xl mx-auto px-6 md:px-16 py-5 flex justify-between items-center">
-
-            <!-- Logo -->
+    <nav class="bg-[#FAF8F5] py-5 px-8 md:px-16 border-b border-stone-200/50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="/" class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full bg-[#2D1A12] flex items-center justify-center text-white text-xs font-serif font-bold">
                     US
@@ -27,7 +25,6 @@
                 <span class="text-2xl font-serif font-bold tracking-tight text-[#1C1C1C]">Ulam Sari</span>
             </a>
 
-            <!-- Menu Desktop -->
             <div class="hidden md:flex items-center space-x-10 text-sm font-medium text-stone-700">
                 <a href="/" class="hover:text-black transition">Beranda</a>
                 <a href="/menu" class="hover:text-black transition">Menu</a>
@@ -35,32 +32,10 @@
                 <a href="/tentang-kami" class="hover:text-black transition">Tentang Kami</a>
             </div>
 
-            <!-- Tombol Tanya Ulam AI (Desktop) -->
-            <a href="{{ route('ai.index') }}" class="hidden md:flex bg-[#A0522D] hover:bg-[#8B4513] text-white text-sm font-medium px-5 py-2.5 rounded-xl items-center gap-2 shadow-sm transition">
-                <i class="fa-solid fa-wand-magic-sparkles text-amber-200 text-xs"></i>
+            <a href="{{ route('ai.index') }}" class="bg-[#A0522D] hover:bg-[#8B4513] text-white text-xs md:text-sm font-medium px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition">
+                <i class="fa-solid fa-sparkles text-amber-200 text-xs"></i>
                 <span>Tanya Ulam AI</span>
             </a>
-
-            <!-- Tombol Hamburger (HP) -->
-            <button id="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false"
-                    class="md:hidden w-10 h-10 flex items-center justify-center rounded-md text-stone-700 hover:bg-stone-200/60 transition">
-                <i id="icon-open" class="fa-solid fa-bars text-xl"></i>
-                <i id="icon-close" class="fa-solid fa-xmark text-xl hidden"></i>
-            </button>
-        </div>
-
-        <!-- Menu Mobile (dropdown) -->
-        <div id="mobile-menu" class="hidden md:hidden absolute left-0 right-0 top-full border-t border-stone-200/60 bg-[#FAF8F5] shadow-md">
-            <div class="px-6 py-4 flex flex-col text-sm font-medium text-stone-700">
-                <a href="/" class="py-3 border-b border-stone-200/60 hover:text-black transition">Beranda</a>
-                <a href="/menu" class="py-3 border-b border-stone-200/60 hover:text-black transition">Menu</a>
-                <a href="/reservasi" class="py-3 border-b border-stone-200/60 hover:text-black transition">Reservasi</a>
-                <a href="/tentang-kami" class="py-3 border-b border-stone-200/60 hover:text-black transition">Tentang Kami</a>
-                <a href="{{ route('ai.index') }}" class="mt-4 bg-[#A0522D] hover:bg-[#8B4513] text-white text-center px-5 py-3 rounded-xl flex items-center justify-center gap-2 transition">
-                    <i class="fa-solid fa-wand-magic-sparkles text-amber-200 text-xs"></i>
-                    <span>Tanya Ulam AI</span>
-                </a>
-            </div>
         </div>
     </nav>
 
@@ -144,21 +119,6 @@
         </div>
     </footer>
 
-    <!-- SCRIPT HAMBURGER MENU -->
-    <script>
-        const toggleBtn = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const iconOpen = document.getElementById('icon-open');
-        const iconClose = document.getElementById('icon-close');
-
-        toggleBtn.addEventListener('click', () => {
-            const isHidden = mobileMenu.classList.toggle('hidden');
-            iconOpen.classList.toggle('hidden', !isHidden);
-            iconClose.classList.toggle('hidden', isHidden);
-            toggleBtn.setAttribute('aria-expanded', String(!isHidden));
-        });
-    </script>
-
     <!-- SCRIPT AJAX LARAVEL -->
     <script>
         let chatHistory = [];
@@ -234,9 +194,9 @@
                 `;
                 chatContainer.insertAdjacentHTML('beforeend', aiMsgHTML);
                 if (data.status === 'success') {
-                    chatHistory.push({ role: 'user', text: message });
-                    chatHistory.push({ role: 'model', text: replyText });
-                }
+                chatHistory.push({ role: 'user', text: message });
+                chatHistory.push({ role: 'model', text: replyText });
+}
 
             } catch (error) {
                 if (document.getElementById(loadingId)) {
@@ -261,15 +221,15 @@
         }
 
         function linkify(text) {
-            const safe = text
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
+        const safe = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
 
-            return safe.replace(
-                /(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g,
-                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#A0522D;text-decoration:underline;word-break:break-all;">$1</a>'
-            );
+        return safe.replace(
+            /(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#A0522D;text-decoration:underline;word-break:break-all;">$1</a>'
+        );
         }
     </script>
 </body>
