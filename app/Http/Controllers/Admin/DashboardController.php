@@ -16,7 +16,7 @@ class DashboardController extends Controller
     {
         if (Auth::check()) {
             $menus = Menu::orderBy('id', 'desc')->get();
-            $reservations = Reservation::orderBy('id', 'desc')->get();
+            $reservations = Reservation::with('payments')->orderBy('id', 'desc')->get();
             $activities = Activity::orderBy('id', 'desc')->get();
         } else {
             $menus = collect();

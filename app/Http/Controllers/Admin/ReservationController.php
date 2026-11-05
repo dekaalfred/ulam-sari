@@ -13,7 +13,7 @@ class ReservationController extends Controller
     // Menampilkan daftar reservasi
     public function index()
     {
-        $reservations = Reservation::orderBy('id', 'desc')->get();
+        $reservations = Reservation::with('payments')->orderBy('id', 'desc')->get();
 
         return response()->json([
             'success' => true,

@@ -274,6 +274,7 @@
     cursor: not-allowed;
     opacity: .9;
 }
+
     </style>
 </head>
 
@@ -554,6 +555,7 @@
     onblur="validateField('peserta')"
     class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-[#C86D3B] bg-transparent transition-colors"
 >
+<p id="errPeserta" class="text-[11px] text-red-600 mt-1 hidden"></p>
                             </div>
 
                         </div>
@@ -1102,45 +1104,48 @@ renderScheduleSlots(tanggal, scheduleSlots);
         
     };
 
-    function validateField(id) {
+    function errElOf(id) {
+    return document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
+}
 
-        const input = document.getElementById(id);
-        const errEl = document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
-        const rule = fieldRules[id];
+function validateField(id) {
+    const input = document.getElementById(id);
+    const errEl = errElOf(id);
+    const rule = fieldRules[id];
 
-        if (!rule) return true;
+    if (!input || !rule) return true;
 
-        const valid = rule.check(input.value);
+    const valid = rule.check(input.value);
 
-        if (!valid) {
-            input.classList.add('border-red-400');
+    if (!valid) {
+        input.classList.add('border-red-400');
+        if (errEl) {
             errEl.textContent = rule.message;
             errEl.classList.remove('hidden');
-        } else {
-            clearFieldError(id);
         }
-
-        return valid;
-
+    } else {
+        clearFieldError(id);
     }
 
-    function clearFieldError(id) {
+    return valid;
+}
 
-        const input = document.getElementById(id);
-        const errEl = document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
+function clearFieldError(id) {
+    const input = document.getElementById(id);
+    const errEl = errElOf(id);
 
-        input.classList.remove('border-red-400');
-        errEl.classList.add('hidden');
+    if (input) input.classList.remove('border-red-400');
+    if (errEl) errEl.classList.add('hidden');
+}
 
-    }
+function setFieldError(id, message) {
+    const errEl = errElOf(id);
+    if (!errEl) return;
 
-    function setFieldError(id, message) {
+    errEl.textContent = message;
+    errEl.classList.remove('hidden');
+}
 
-        const errEl = document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
-        errEl.textContent = message;
-        errEl.classList.remove('hidden');
-
-    }
 
 
     // ============================================================
@@ -1498,13 +1503,12 @@ function resetRangeSelection(clearFields = false) {
         const jamSelesai = document.getElementById('jamSelesai').value;
 
         if (!jamMulai || !jamSelesai) {
-            document.getElementById('errWaktu').textContent = 'Jam mulai dan jam selesai wajib diisi.';
-            document.getElementById('errWaktu').classList.remove('hidden');
-            valid = false;
-        } else if (!jamTersedia) {
-            setFieldError('waktu', 'Jam yang Anda pilih belum tersedia. Silakan sesuaikan lagi.');
-            valid = false;
-        }
+    document.getElementById('errWaktu').textContent = 'Jam mulai dan jam selesai wajib diisi.';
+    document.getElementById('errWaktu').classList.remove('hidden');
+    valid = false;
+} else {
+    document.getElementById('errWaktu').classList.add('hidden');
+}
 
         if (!valid) {
             showToast('Beberapa data belum lengkap atau belum sesuai. Silakan periksa kembali form Anda.', 'error');

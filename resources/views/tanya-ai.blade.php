@@ -121,6 +121,7 @@
 
     <!-- SCRIPT AJAX LARAVEL -->
     <script>
+        let chatHistory = [];
         async function handleSendMessage(event) {
             event.preventDefault();
             
@@ -172,14 +173,15 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({ message: message, history: chatHistory.slice(-20) })
                 });
 
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
 
                 // 4. Tampilkan jawaban dari Controller AI
-                const aiReply = data.reply.replace(/\n/g, '<br>');
+                const replyText = data.reply || 'Maaf, Ulam AI belum bisa menjawab. Silakan coba lagi.';
+                const aiReply = linkify(replyText).replace(/\n/g, '<br>');  
                 const aiMsgHTML = `
                     <div class="flex items-start gap-3">
                         <div class="w-8 h-8 rounded-full bg-[#EAE3D9] flex-shrink-0 flex items-center justify-center border border-stone-300 text-[#2D1A12]">
@@ -191,6 +193,10 @@
                     </div>
                 `;
                 chatContainer.insertAdjacentHTML('beforeend', aiMsgHTML);
+                if (data.status === 'success') {
+                chatHistory.push({ role: 'user', text: message });
+                chatHistory.push({ role: 'model', text: replyText });
+}
 
             } catch (error) {
                 if (document.getElementById(loadingId)) {
@@ -212,6 +218,18 @@
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
+        }
+
+        function linkify(text) {
+        const safe = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        return safe.replace(
+            /(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#A0522D;text-decoration:underline;word-break:break-all;">$1</a>'
+        );
         }
     </script>
 </body>
