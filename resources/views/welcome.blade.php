@@ -20,21 +20,44 @@
 <body class="bg-[#FAF8F5] text-[#2C221E]">
 
     <!-- NAVBAR -->
-    <nav class="bg-[#2D1A12] text-white py-4 px-8 sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl font-serif font-bold tracking-wide">Ulam Sari</span>
-            </div>
+    <nav class="bg-[#2D1A12] text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 py-4 flex justify-between items-center">
+
+            <!-- Logo -->
+            <a href="{{ url('/') }}" class="text-2xl font-serif font-bold tracking-wide">Ulam Sari</a>
+
+            <!-- Menu Desktop -->
             <div class="hidden md:flex space-x-8 text-sm font-medium text-[#D1C7BD]">
-               <a href="{{ url('/') }}" class="hover:underline">Beranda</a>
+                <a href="{{ url('/') }}" class="hover:text-white transition">Beranda</a>
                 <a href="/menu" class="hover:text-white transition">Menu</a>
                 <a href="/reservasi" class="hover:text-white transition">Reservasi</a>
                 <a href="/tentang-kami" class="hover:text-white transition">Tentang Kami</a>
             </div>
-            <!-- Tombol Tanya Ulam AI -->
-            <a href="{{ route('ai.index') }}" class="bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs md:text-sm px-4 py-2 rounded-full flex items-center gap-2 transition">
+
+            <!-- Tombol Tanya Ulam AI (Desktop) -->
+            <a href="{{ route('ai.index') }}" class="hidden md:flex bg-[#1C3A27] hover:bg-[#142B1D] text-white text-sm px-4 py-2 rounded-full items-center gap-2 transition">
                 <span>💬 Tanya Ulam AI</span>
             </a>
+
+            <!-- Tombol Hamburger (HP) -->
+            <button id="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false"
+                    class="md:hidden w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition">
+                <i id="icon-open" class="fa-solid fa-bars text-xl"></i>
+                <i id="icon-close" class="fa-solid fa-xmark text-xl hidden"></i>
+            </button>
+        </div>
+
+        <!-- Menu Mobile (dropdown) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-[#2D1A12]">
+            <div class="px-6 py-4 flex flex-col text-sm font-medium text-[#D1C7BD]">
+                <a href="{{ url('/') }}" class="py-3 border-b border-white/10 hover:text-white transition">Beranda</a>
+                <a href="/menu" class="py-3 border-b border-white/10 hover:text-white transition">Menu</a>
+                <a href="/reservasi" class="py-3 border-b border-white/10 hover:text-white transition">Reservasi</a>
+                <a href="/tentang-kami" class="py-3 border-b border-white/10 hover:text-white transition">Tentang Kami</a>
+                <a href="{{ route('ai.index') }}" class="mt-4 bg-[#1C3A27] hover:bg-[#142B1D] text-white text-center px-4 py-3 rounded-full transition">
+                    💬 Tanya Ulam AI
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -192,7 +215,7 @@
             <div class="space-y-3">
                 <h4 class="font-bold text-[#E0C097] text-xs uppercase tracking-wider">Tautan</h4>
                 <ul class="space-y-2 text-xs text-emerald-100/90">
-               <a href="{{ url('/') }}" class="hover:underline">Beranda</a>
+                    <li><a href="{{ url('/') }}" class="hover:underline">Beranda</a></li>
                     <li><a href="/menu" class="hover:underline">Menu</a></li>
                     <li><a href="/reservasi" class="hover:underline">Reservasi</a></li>
                     <li><a href="/tentang-kami" class="hover:underline">Tentang Kami</a></li>
@@ -216,6 +239,21 @@
             &copy; 2026 Resto dan Lesehan Ulam Sari. Hak Cipta Dilindungi Undang-Undang.
         </div>
     </footer>
+
+    <!-- SCRIPT HAMBURGER MENU -->
+    <script>
+        const toggleBtn = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('icon-open');
+        const iconClose = document.getElementById('icon-close');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            iconOpen.classList.toggle('hidden', !isHidden);
+            iconClose.classList.toggle('hidden', isHidden);
+            toggleBtn.setAttribute('aria-expanded', String(!isHidden));
+        });
+    </script>
 
 </body>
 </html>

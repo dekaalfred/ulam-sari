@@ -21,11 +21,13 @@
 <body class="bg-[#FAF8F5] text-amber-950">
 
     <!-- NAVBAR -->
-    <nav class="bg-[#2D1A12] text-white py-4 px-8 sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl font-serif font-bold tracking-wide">Ulam Sari</span>
-            </div>
+    <nav class="bg-[#2D1A12] text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 py-4 flex justify-between items-center">
+
+            <!-- Logo -->
+            <a href="/" class="text-2xl font-serif font-bold tracking-wide">Ulam Sari</a>
+
+            <!-- Menu Desktop -->
             <div class="hidden md:flex space-x-8 text-sm font-medium text-[#D1C7BD]">
                 <a href="/" class="hover:text-white transition">Beranda</a>
                 <a href="/menu" class="text-white font-semibold border-b-2 border-[#C86D3B] pb-1">Menu</a>
@@ -33,10 +35,30 @@
                 <a href="/tentang-kami" class="hover:text-white transition">Tentang Kami</a>
             </div>
 
-            <!-- Tombol Tanya Ulam AI (Konsisten menggunakan route Blade) -->
-            <a href="{{ route('ai.index') }}" class="bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs md:text-sm px-4 py-2 rounded-full flex items-center gap-2 transition">
+            <!-- Tombol Tanya Ulam AI (Desktop) -->
+            <a href="{{ route('ai.index') }}" class="hidden md:flex bg-[#1C3A27] hover:bg-[#142B1D] text-white text-sm px-4 py-2 rounded-full items-center gap-2 transition">
                 <span>💬 Tanya Ulam AI</span>
             </a>
+
+            <!-- Tombol Hamburger (HP) -->
+            <button id="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false"
+                    class="md:hidden w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition">
+                <i id="icon-open" class="fa-solid fa-bars text-xl"></i>
+                <i id="icon-close" class="fa-solid fa-xmark text-xl hidden"></i>
+            </button>
+        </div>
+
+        <!-- Menu Mobile (dropdown) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-[#2D1A12]">
+            <div class="px-6 py-4 flex flex-col text-sm font-medium text-[#D1C7BD]">
+                <a href="/" class="py-3 border-b border-white/10 hover:text-white transition">Beranda</a>
+                <a href="/menu" class="py-3 border-b border-white/10 text-white font-semibold">Menu</a>
+                <a href="/reservasi" class="py-3 border-b border-white/10 hover:text-white transition">Reservasi</a>
+                <a href="/tentang-kami" class="py-3 border-b border-white/10 hover:text-white transition">Tentang Kami</a>
+                <a href="{{ route('ai.index') }}" class="mt-4 bg-[#1C3A27] hover:bg-[#142B1D] text-white text-center px-4 py-3 rounded-full transition">
+                    💬 Tanya Ulam AI
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -145,6 +167,7 @@
                 </div>
             </div>
         @endforeach
+                </div>
             </div>
         </section>
 </main>
@@ -248,3 +271,21 @@
     </div>
 
 </footer>
+
+    <!-- SCRIPT HAMBURGER MENU -->
+    <script>
+        const toggleBtn = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('icon-open');
+        const iconClose = document.getElementById('icon-close');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            iconOpen.classList.toggle('hidden', !isHidden);
+            iconClose.classList.toggle('hidden', isHidden);
+            toggleBtn.setAttribute('aria-expanded', String(!isHidden));
+        });
+    </script>
+
+</body>
+</html>
