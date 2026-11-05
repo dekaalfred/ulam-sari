@@ -171,57 +171,6 @@
             color: #b45309;
         }
 
-        .schedule-card.insufficient {
-    border: 1px solid #f59e0b;
-    background: #fff7ed;
-    color: #9a3412;
-    cursor: not-allowed;
-    opacity: 0.9;
-}
-
-.schedule-card.insufficient .schedule-time {
-    color: #c2410c;
-}
-
-.schedule-card.insufficient .schedule-meta {
-    color: #ea580c;
-    font-weight: 700;
-}
-
-.schedule-card.full {
-    border: 1px solid #ef4444;
-    background: #fef2f2;
-    color: #991b1b;
-    cursor: not-allowed;
-    opacity: 0.9;
-}
-
-.schedule-card.full .schedule-time {
-    color: #991b1b;
-}
-
-.schedule-card.full .schedule-meta {
-    color: #dc2626;
-    font-weight: 700;
-}
-
-.schedule-card.available {
-    border: 1px solid #86efac;
-    background: #f0fdf4;
-    color: #166534;
-    cursor: pointer;
-}
-
-.schedule-card.available:hover {
-    border-color: #22c55e;
-    background: #dcfce7;
-}
-
-.schedule-card.selected {
-    border: 2px solid #1C3A27 !important;
-    background: #dcfce7 !important;
-}
-
         @media (max-width: 640px) {
             .schedule-grid { grid-template-columns: 1fr; }
         }
@@ -236,45 +185,6 @@
         @media (prefers-reduced-motion: reduce) {
             .overlay-enter, .sheet-enter, .slot-btn, .spinner { animation: none !important; transition: none !important; }
         }
-        .schedule-card.full {
-    border: 1px solid #fca5a5;
-    background: #fef2f2;
-    color: #991b1b;
-    cursor: not-allowed;
-    opacity: 0.85;
-}
-
-.schedule-card.full .schedule-time {
-    color: #991b1b;
-}
-
-.schedule-card.full .schedule-meta {
-    color: #dc2626;
-}
-.schedule-card.insufficient {
-    border: 1px solid #fdba74;
-    background: #fff7ed;
-    color: #9a3412;
-    cursor: not-allowed;
-    opacity: .9;
-}
-
-.schedule-card.insufficient .schedule-time {
-    color: #c2410c;
-}
-
-.schedule-card.insufficient .schedule-meta {
-    color: #ea580c;
-}
-
-.schedule-card.full {
-    border: 1px solid #fca5a5;
-    background: #fef2f2;
-    color: #991b1b;
-    cursor: not-allowed;
-    opacity: .9;
-}
-
     </style>
 </head>
 
@@ -292,10 +202,10 @@
 <!-- NAVBAR -->
 <!-- ========================================================= -->
 
-<nav class="bg-[#2D1A12] text-white py-4 px-8 sticky top-0 z-50 shadow-md">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
+<nav class="bg-[#2D1A12] text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 md:px-8 py-4 flex justify-between items-center">
 
-        <span class="text-2xl font-serif font-bold tracking-wide">Ulam Sari</span>
+        <a href="/" class="text-2xl font-serif font-bold tracking-wide">Ulam Sari</a>
 
         <div class="hidden md:flex space-x-8 text-sm font-medium text-[#D1C7BD]">
             <a href="/" class="hover:text-white transition">Beranda</a>
@@ -305,10 +215,28 @@
         </div>
 
         <a href="{{ route('ai.index') }}"
-           class="bg-[#1C3A27] hover:bg-[#142B1D] text-white text-xs md:text-sm px-4 py-2 rounded-full flex items-center gap-2 transition">
+           class="hidden md:flex bg-[#1C3A27] hover:bg-[#142B1D] text-white text-sm px-4 py-2 rounded-full items-center gap-2 transition">
             <span>💬 Tanya Ulam AI</span>
         </a>
 
+        <button id="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false"
+                class="md:hidden w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition">
+            <i id="icon-open" class="fa-solid fa-bars text-xl"></i>
+            <i id="icon-close" class="fa-solid fa-xmark text-xl hidden"></i>
+        </button>
+
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-[#2D1A12]">
+        <div class="px-6 py-4 flex flex-col text-sm font-medium text-[#D1C7BD]">
+            <a href="/" class="py-3 border-b border-white/10 hover:text-white transition">Beranda</a>
+            <a href="/menu" class="py-3 border-b border-white/10 hover:text-white transition">Menu</a>
+            <a href="/reservasi" class="py-3 border-b border-white/10 text-white font-semibold">Reservasi</a>
+            <a href="/tentang-kami" class="py-3 border-b border-white/10 hover:text-white transition">Tentang Kami</a>
+            <a href="{{ route('ai.index') }}" class="mt-4 bg-[#1C3A27] hover:bg-[#142B1D] text-white text-center px-4 py-3 rounded-full transition">
+                💬 Tanya Ulam AI
+            </a>
+        </div>
     </div>
 </nav>
 
@@ -349,13 +277,6 @@
             <span>{{ session('success') }}</span>
         </div>
     @endif
-
-    @if(session('error'))
-    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-8 text-sm flex items-start gap-3">
-        <i class="fa-solid fa-circle-exclamation text-red-600 mt-0.5"></i>
-        <span>{{ session('error') }}</span>
-    </div>
-@endif
 
     @if($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-8 text-sm">
@@ -523,8 +444,7 @@
 
 
                     <!-- GROUP 2: JADWAL & KAPASITAS -->
-                    
-                    <div class="mt-3">
+                    <div>
                         <div class="flex items-center gap-2 mb-4">
                             <span class="w-5 h-5 rounded-full bg-[#231512] text-white text-[10px] font-bold flex items-center justify-center">2</span>
                             <h3 class="text-sm font-bold text-gray-800">Jadwal &amp; Kapasitas</h3>
@@ -544,18 +464,23 @@
                             <div>
                                 <label for="peserta" class="block text-xs font-bold text-gray-700 mb-2">Jumlah Peserta</label>
                                 <input
-    type="number"
-    id="peserta"
-    name="jumlah_peserta"
-    placeholder="Contoh: 20"
-    min="1"
-    max="100"
-    required
-    oninput="updateDpPreview(); clearFieldError('peserta'); onPesertaChange()"
-    onblur="validateField('peserta')"
-    class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-[#C86D3B] bg-transparent transition-colors"
->
-<p id="errPeserta" class="text-[11px] text-red-600 mt-1 hidden"></p>
+                                    type="number" id="peserta" name="jumlah_peserta"
+                                    placeholder="Contoh: 20" min="1" required
+                                    oninput="updateDpPreview(); clearFieldError('peserta')"
+                                    onblur="validateField('peserta')"
+                                    class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-[#C86D3B] bg-transparent transition-colors">
+                                <p class="text-[11px] text-gray-400 mt-1">DP dihitung Rp10.000 &times; jumlah peserta ini.</p>
+                                <p id="errPeserta" class="text-[11px] text-red-600 mt-1 hidden"></p>
+                            </div>
+
+                            <div>
+                                <label for="meja" class="block text-xs font-bold text-gray-700 mb-2">Jumlah Meja</label>
+                                <input
+                                    type="number" id="meja" name="jumlah_meja"
+                                    placeholder="Contoh: 2" min="1" required
+                                    onblur="validateField('meja')" oninput="clearFieldError('meja')"
+                                    class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-[#C86D3B] bg-transparent transition-colors">
+                                <p id="errMeja" class="text-[11px] text-red-600 mt-1 hidden"></p>
                             </div>
 
                         </div>
@@ -566,45 +491,23 @@
 
                             <div class="grid grid-cols-2 gap-4 mb-3">
 
-    <div>
-        <label class="block text-[11px] text-gray-500 mb-1">
-            Jam Mulai
-        </label>
+                                <div>
+                                    <label for="jamMulai" class="block text-[11px] text-gray-500 mb-1">Jam Mulai</label>
+                                    <input
+                                        type="time" id="jamMulai" name="waktu_acara" required
+                                        onchange="onJamChange()"
+                                        class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-[#C86D3B] bg-transparent transition-colors">
+                                </div>
 
-        <input
-            type="hidden"
-            id="jamMulai"
-            name="jam_mulai"
-        >
+                                <div>
+                                    <label for="jamSelesai" class="block text-[11px] text-gray-500 mb-1">Jam Selesai</label>
+                                    <input
+                                        type="time" id="jamSelesai" name="waktu_selesai_acara" required
+                                        onchange="onJamChange()"
+                                        class="w-full text-sm border-b border-gray-300 py-2 focus:outline-none focus:border-[#C86D3B] bg-transparent transition-colors">
+                                </div>
 
-        <div
-            id="jamMulaiDisplay"
-            class="w-full text-sm border-b border-gray-300 py-2 text-gray-400"
-        >
-            Pilih slot di bawah
-        </div>
-    </div>
-
-    <div>
-        <label class="block text-[11px] text-gray-500 mb-1">
-            Jam Selesai
-        </label>
-
-        <input
-            type="hidden"
-            id="jamSelesai"
-            name="jam_selesai"
-        >
-
-        <div
-            id="jamSelesaiDisplay"
-            class="w-full text-sm border-b border-gray-300 py-2 text-gray-400"
-        >
-            Pilih slot di bawah
-        </div>
-    </div>
-
-</div>
+                            </div>
 
                             <p id="statusJam" class="text-[11px] mb-2"></p>
 
@@ -625,6 +528,7 @@
                                 <div class="flex flex-wrap gap-2 mb-3 text-[9px] font-medium text-gray-600">
                                     <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#1C3A27]"></span>Tersedia</span>
                                     <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500"></span>Sudah dibooking</span>
+                                    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span>Menunggu verifikasi</span>
                                 </div>
 
                                 <div id="rangeHelper" class="range-helper rounded-lg px-3 py-2 mb-3 text-[10px]">
@@ -690,7 +594,7 @@
 
                     <div class="pt-2 flex flex-col sm:flex-row gap-4">
 
-                        <button type="submit" name="metode_pembayaran" value="bayar_ditempat"
+                        <button type="submit"
                             class="flex-1 bg-[#231512] text-white text-xs py-3 px-6 rounded-lg font-medium hover:bg-black transition">
                             <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Data (Bayar Nanti)
                         </button>
@@ -758,6 +662,7 @@
                 <div class="flex justify-between gap-4"><span>Tanggal:</span><span id="summaryTanggal" class="font-semibold text-gray-900">-</span></div>
                 <div class="flex justify-between gap-4"><span>Jam Reservasi:</span><span id="summaryWaktu" class="font-semibold text-gray-900">-</span></div>
                 <div class="flex justify-between gap-4"><span>Jumlah Peserta:</span><span id="summaryPeserta" class="font-semibold text-gray-900">-</span></div>
+                <div class="flex justify-between gap-4"><span>Jumlah Meja:</span><span id="summaryMeja" class="font-semibold text-gray-900">-</span></div>
                 <div class="flex justify-between gap-4"><span>Rincian DP:</span><span id="summaryDpRincian" class="font-semibold text-[#C86D3B] text-right">-</span></div>
                 <div class="flex justify-between gap-4"><span>Metode:</span><span class="font-semibold">QRIS</span></div>
             </div>
@@ -894,10 +799,9 @@
 
     const DP_PER_ORANG = 10000;
     let timerInterval;
-let jamTersedia = false;
-let rangeMulai = null;
-let rangeSelesai = null;
-let scheduleSlots = [];
+    let jamTersedia = false; // baru true setelah user memilih slot yang kosong
+    let rangeMulai = null;
+    let rangeSelesai = null;
 
     // ============================================================
     // DATA JAM YANG SUDAH DIBOOKING
@@ -931,87 +835,11 @@ let scheduleSlots = [];
     // pending   = menunggu verifikasi/pembayaran
     // ============================================================
 
-async function loadAvailability() {
-    const tanggal = document.getElementById('tanggal')?.value;
-    const pesertaInput = document.getElementById('peserta');
-
-    const jumlahPeserta = parseInt(pesertaInput?.value || 1);
-
-    const list = document.getElementById('jadwalTerpakaiList');
-    const box = document.getElementById('jadwalTerpakaiBox');
-
-    if (!tanggal) {
-        if (box) box.classList.add('hidden');
-        return;
-    }
-
-    if (!jumlahPeserta || jumlahPeserta < 1) {
-        if (box) box.classList.add('hidden');
-        return;
-    }
-
-    // Tampilkan box jadwal
-    box.classList.remove('hidden');
-
-    list.innerHTML = `
-        <div class="col-span-2 text-center py-6 text-gray-400 text-sm">
-            Mengecek ketersediaan jam...
-        </div>
-    `;
-
-    try {
-        const res = await fetch(
-            `/reservasi/cek-ketersediaan?tanggal=${encodeURIComponent(tanggal)}&peserta=${encodeURIComponent(jumlahPeserta)}`
-        );
-
-        const data = await res.json();
-
-        if (!res.ok || !data.success) {
-            throw new Error('Gagal mengambil data ketersediaan.');
-        }
-
-scheduleSlots = data.slots || [];
-resetRangeSelection(true);
-renderScheduleSlots(tanggal, scheduleSlots);
-        // Label tanggal
-        const tanggalLabel = document.getElementById('jadwalTanggalLabel');
-
-        if (tanggalLabel) {
-            const dateObj = new Date(tanggal + 'T00:00:00');
-
-            tanggalLabel.textContent =
-                dateObj.toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                }) + ' • Jam operasional 09.00–21.00 WIB';
-        }
-
-        // Counter
-        const counter = document.getElementById('slotCounter');
-
-        if (counter) {
-            const tersedia = scheduleSlots.filter(
-                slot => slot.bisa_dipilih
-            ).length;
-
-            counter.textContent = `${tersedia} slot tersedia`;
-        }
-
-    } catch (error) {
-
-        console.error('Ketersediaan jam:', error);
-
-        scheduleSlots = [];
-
-        list.innerHTML = `
-            <div class="col-span-2 text-center py-6 text-red-500 text-sm">
-                Gagal mengambil data ketersediaan jam.
-            </div>
-        `;
-    }
-}
+    const jamTerbooking = [
+        { tanggal: '2026-09-10', mulai: '12:00', selesai: '13:30', status: 'confirmed' },
+        { tanggal: '2026-09-10', mulai: '19:00', selesai: '20:00', status: 'pending' },
+        { tanggal: '2026-09-12', mulai: '18:00', selesai: '19:00', status: 'confirmed' },
+    ];
 
     const JAM_BUKA = '09:00';
     const JAM_TUTUP = '21:00';
@@ -1101,320 +929,316 @@ renderScheduleSlots(tanggal, scheduleSlots);
             check: v => parseInt(v) >= 1,
             message: 'Jumlah peserta minimal 1 orang.'
         },
-        
+        meja: {
+            check: v => parseInt(v) >= 1,
+            message: 'Jumlah meja minimal 1.'
+        },
     };
 
-    function errElOf(id) {
-    return document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
-}
+    function validateField(id) {
 
-function validateField(id) {
-    const input = document.getElementById(id);
-    const errEl = errElOf(id);
-    const rule = fieldRules[id];
+        const input = document.getElementById(id);
+        const errEl = document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
+        const rule = fieldRules[id];
 
-    if (!input || !rule) return true;
+        if (!rule) return true;
 
-    const valid = rule.check(input.value);
+        const valid = rule.check(input.value);
 
-    if (!valid) {
-        input.classList.add('border-red-400');
-        if (errEl) {
+        if (!valid) {
+            input.classList.add('border-red-400');
             errEl.textContent = rule.message;
             errEl.classList.remove('hidden');
+        } else {
+            clearFieldError(id);
         }
-    } else {
-        clearFieldError(id);
+
+        return valid;
+
     }
 
-    return valid;
-}
+    function clearFieldError(id) {
 
-function clearFieldError(id) {
-    const input = document.getElementById(id);
-    const errEl = errElOf(id);
+        const input = document.getElementById(id);
+        const errEl = document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
 
-    if (input) input.classList.remove('border-red-400');
-    if (errEl) errEl.classList.add('hidden');
-}
+        input.classList.remove('border-red-400');
+        errEl.classList.add('hidden');
 
-function setFieldError(id, message) {
-    const errEl = errElOf(id);
-    if (!errEl) return;
+    }
 
-    errEl.textContent = message;
-    errEl.classList.remove('hidden');
-}
+    function setFieldError(id, message) {
 
+        const errEl = document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
+        errEl.textContent = message;
+        errEl.classList.remove('hidden');
+
+    }
 
 
     // ============================================================
     // PEMILIH JAM VISUAL
     // ============================================================
 
-async function onTanggalChange() {
-    document.getElementById('jamMulai').value = '';
-    document.getElementById('jamSelesai').value = '';
-    document.getElementById('waktu').value = '';
-    document.getElementById('statusJam').textContent = '';
-    jamTersedia = false;
+    function onTanggalChange() {
 
-    clearFieldError('tanggal');
-    document.getElementById('errWaktu').classList.add('hidden');
-    resetRangeSelection(true);
-
-    const tanggal = document.getElementById('tanggal').value;
-    const peserta = parseInt(document.getElementById('peserta').value) || 0;
-
-    const box = document.getElementById('jadwalTerpakaiBox');
-    const list = document.getElementById('jadwalTerpakaiList');
-    const label = document.getElementById('jadwalTanggalLabel');
-    const counter = document.getElementById('slotCounter');
-
-    if (!tanggal) {
-        box.classList.add('hidden');
-        return;
-    }
-
-    if (peserta < 1) {
-        box.classList.add('hidden');
-        return;
-    }
-
-    label.textContent =
-        formatTanggal(tanggal) + ' • Jam operasional 09.00–21.00 WIB';
-
-    try {
-        const res = await fetch(
-            `/reservasi/cek-ketersediaan?tanggal=${encodeURIComponent(tanggal)}&peserta=${encodeURIComponent(peserta)}`
-        );
-
-        if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        if (!data.success) {
-            throw new Error('Data ketersediaan tidak valid');
-        }
-
-        scheduleSlots = data.slots;
-
-        renderScheduleSlots(tanggal, data.slots);
-
-        const slotTersedia = data.slots.filter(
-            slot => slot.bisa_dipilih
-        ).length;
-
-        counter.textContent = `${slotTersedia} slot tersedia`;
-
-        box.classList.remove('hidden');
-
-    } catch (error) {
-        console.error('Gagal mengambil data ketersediaan:', error);
-
-        list.innerHTML = `
-            <p class="text-red-500 text-sm text-center py-6">
-                Gagal mengambil data ketersediaan jam.
-            </p>
-        `;
-
-        box.classList.remove('hidden');
-    }
-}
-
-function renderScheduleSlots(tanggal, slots) {
-    scheduleSlots = slots;
-
-    const list = document.getElementById('jadwalTerpakaiList');
-
-    list.innerHTML = slots.map(slot => {
-
-        if (slot.penuh) {
-            return `
-                <button
-                    type="button"
-                    disabled
-                    class="schedule-card full"
-                >
-                    <div class="flex items-center justify-between gap-2">
-                        <span class="schedule-time">
-                            ${slot.mulai.replace(':', '.')} – ${slot.selesai.replace(':', '.')}
-                        </span>
-                        <i class="fa-solid fa-lock text-red-600 text-[10px]"></i>
-                    </div>
-
-                    <p class="schedule-meta text-red-600 font-semibold">
-                        PENUH • ${slot.terisi} / ${slot.kapasitas} ORANG
-                    </p>
-                </button>
-            `;
-        }
-
-        if (!slot.bisa_dipilih) {
-            return `
-                <button
-                    type="button"
-                    disabled
-                    class="schedule-card insufficient"
-                >
-                    <div class="flex items-center justify-between gap-2">
-                        <span class="schedule-time">
-                            ${slot.mulai.replace(':', '.')} – ${slot.selesai.replace(':', '.')}
-                        </span>
-
-                        <i class="fa-solid fa-triangle-exclamation text-orange-600 text-[10px]"></i>
-                    </div>
-
-                    <p class="schedule-meta text-orange-600 font-semibold">
-                        TIDAK CUKUP • ${slot.tersisa} KURSI TERSISA
-                    </p>
-                </button>
-            `;
-        }
-
-        return `
-            <button
-                type="button"
-                class="schedule-card available"
-                data-start="${slot.mulai}"
-                data-end="${slot.selesai}"
-                onclick="pilihSlot('${slot.mulai}', '${slot.selesai}', this)"
-            >
-                <div class="flex items-center justify-between gap-2">
-                    <span class="schedule-time">
-                        ${slot.mulai.replace(':', '.')} – ${slot.selesai.replace(':', '.')}
-                    </span>
-
-                    <i class="fa-solid fa-circle-check text-[#1C3A27] text-[10px]"></i>
-                </div>
-
-                <p class="schedule-meta">
-                    TERSEDIA • ${slot.tersisa} kursi tersisa
-                </p>
-            </button>
-        `;
-    }).join('');
-
-    refreshRangeVisual();
-}
-
-let selectedStart = null;
-let selectedEnd = null;
-
-function pilihSlot(mulai, selesai, button) {
-
-    // Klik pertama = JAM MULAI
-    if (!selectedStart || selectedEnd) {
-
-        selectedStart = mulai;
-        selectedEnd = null;
-
-        document.getElementById('jamMulai').value = selectedStart;
-document.getElementById('jamSelesai').value = '';
-
-document.getElementById('waktu').value = '';
-
-document.getElementById('jamMulaiDisplay').textContent = selectedStart.replace(':', '.') + ' WIB';
-document.getElementById('jamMulaiDisplay').classList.remove('text-gray-400');
-document.getElementById('jamMulaiDisplay').classList.add('text-gray-900', 'font-semibold');
-
-document.getElementById('jamSelesaiDisplay').textContent = 'Pilih slot di bawah';
-document.getElementById('jamSelesaiDisplay').classList.remove('text-gray-900', 'font-semibold');
-document.getElementById('jamSelesaiDisplay').classList.add('text-gray-400');
-
-        document.getElementById('statusJam').textContent =
-            `Jam mulai dipilih: ${mulai.replace(':', '.')} WIB. Pilih jam selesai.`;
-
-        refreshRangeVisual();
-
-        return;
-    }
-
-    // Klik kedua = JAM SELESAI
-    if (!selectedEnd) {
-
-        // Tidak boleh pilih jam selesai sebelum jam mulai
-        if (selesai <= selectedStart) {
-            document.getElementById('statusJam').textContent =
-                'Jam selesai harus setelah jam mulai.';
-            return;
-        }
-
-        selectedEnd = selesai;
-
-        document.getElementById('jamSelesai').value = selectedEnd;
-
-        document.getElementById('waktu').value =
-            `${selectedStart} - ${selectedEnd}`;
-
-        document.getElementById('jamSelesaiDisplay').textContent = selectedEnd.replace(':', '.') + ' WIB';
-document.getElementById('jamSelesaiDisplay').classList.remove('text-gray-400');
-document.getElementById('jamSelesaiDisplay').classList.add('text-gray-900', 'font-semibold');
-
-        document.getElementById('statusJam').textContent =
-            `Rentang dipilih: ${selectedStart.replace(':', '.')} – ${selectedEnd.replace(':', '.')} WIB`;
-
-        refreshRangeVisual();
-    }
-}
-
-function refreshRangeVisual() {
-    const buttons = document.querySelectorAll(
-        '#jadwalTerpakaiList .schedule-card.available'
-    );
-
-    buttons.forEach(button => {
-
-        const start = button.dataset.start;
-        const end = button.dataset.end;
-
-        button.classList.remove(
-            'selected-start',
-            'selected-end',
-            'selected-range'
-        );
-
-        if (!selectedStart) {
-            return;
-        }
-
-        // Slot jam mulai
-        if (start === selectedStart) {
-            button.classList.add('selected-start');
-        }
-
-        // Slot jam selesai
-        if (selectedEnd && end === selectedEnd) {
-            button.classList.add('selected-end');
-        }
-
-        // Slot yang berada di dalam rentang
-        if (
-            selectedEnd &&
-            start >= selectedStart &&
-            end <= selectedEnd
-        ) {
-            button.classList.add('selected-range');
-        }
-    });
-}
-
-function resetRangeSelection(clearFields = false) {
-
-    selectedStart = null;
-    selectedEnd = null;
-
-    if (clearFields) {
         document.getElementById('jamMulai').value = '';
         document.getElementById('jamSelesai').value = '';
         document.getElementById('waktu').value = '';
         document.getElementById('statusJam').textContent = '';
+        jamTersedia = false;
+
+        clearFieldError('tanggal');
+        document.getElementById('errWaktu').classList.add('hidden');
+        resetRangeSelection(true);
+
+        const tanggal = document.getElementById('tanggal').value;
+        const box = document.getElementById('jadwalTerpakaiBox');
+        const list = document.getElementById('jadwalTerpakaiList');
+        const label = document.getElementById('jadwalTanggalLabel');
+        const counter = document.getElementById('slotCounter');
+
+        if (!tanggal) {
+            box.classList.add('hidden');
+            return;
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+
+        if (tanggal < today) {
+            setFieldError('tanggal', 'Tanggal acara tidak boleh sebelum hari ini.');
+            box.classList.add('hidden');
+            return;
+        }
+
+        const jadwalHariItu = jamTerbooking
+            .filter(item => item.tanggal === tanggal)
+            .sort((a, b) => timeToMinutes(a.mulai) - timeToMinutes(b.mulai));
+
+        label.textContent = formatTanggal(tanggal) + ' • Jam operasional 09.00–21.00 WIB';
+
+        renderScheduleSlots(tanggal, jadwalHariItu);
+
+        const slotTersedia = generateScheduleSlots(tanggal).filter(slot =>
+            !jadwalHariItu.some(item =>
+                timeToMinutes(slot.mulai) < timeToMinutes(item.selesai) &&
+                timeToMinutes(slot.selesai) > timeToMinutes(item.mulai)
+            )
+        ).length;
+
+        counter.textContent = `${slotTersedia} slot tersedia`;
+        box.classList.remove('hidden');
     }
 
-    refreshRangeVisual();
-}
+    function generateScheduleSlots(tanggal) {
+        const slots = [];
+        let current = timeToMinutes(JAM_BUKA);
+        const end = timeToMinutes(JAM_TUTUP);
+        const durasi = 60;
+
+        while (current + durasi <= end) {
+            const mulai = `${String(Math.floor(current / 60)).padStart(2, '0')}:${String(current % 60).padStart(2, '0')}`;
+            const selesaiMin = current + durasi;
+            const selesai = `${String(Math.floor(selesaiMin / 60)).padStart(2, '0')}:${String(selesaiMin % 60).padStart(2, '0')}`;
+
+            slots.push({ tanggal, mulai, selesai });
+            current += durasi;
+        }
+
+        return slots;
+    }
+
+    function renderScheduleSlots(tanggal, bookings) {
+        const list = document.getElementById('jadwalTerpakaiList');
+        const slots = generateScheduleSlots(tanggal);
+
+        list.innerHTML = slots.map(slot => {
+            const booking = bookings.find(item =>
+                timeToMinutes(slot.mulai) < timeToMinutes(item.selesai) &&
+                timeToMinutes(slot.selesai) > timeToMinutes(item.mulai)
+            );
+
+            if (booking) {
+                const pending = booking.status === 'pending';
+
+                return `
+                    <button type="button"
+                        class="schedule-card ${pending ? 'pending' : 'booked'}"
+                        disabled
+                        title="${pending ? 'Slot sedang menunggu verifikasi' : 'Slot sudah dibooking'}">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="schedule-time">${slot.mulai.replace(':', '.')} – ${slot.selesai.replace(':', '.')}</span>
+                            <i class="fa-solid ${pending ? 'fa-hourglass-half' : 'fa-lock'} text-[10px]"></i>
+                        </div>
+                        <p class="schedule-meta">
+                            ${pending ? 'MENUNGGU VERIFIKASI' : 'SUDAH DIBOOKING'}
+                        </p>
+                    </button>
+                `;
+            }
+
+            return `
+                <button type="button"
+                    class="schedule-card available"
+                    data-start="${slot.mulai}"
+                    data-end="${slot.selesai}"
+                    onclick="pilihSlot('${slot.mulai}', '${slot.selesai}')">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="schedule-time">${slot.mulai.replace(':', '.')} – ${slot.selesai.replace(':', '.')}</span>
+                        <i class="fa-solid fa-check-circle text-[#1C3A27] text-[10px]"></i>
+                    </div>
+                    <p class="schedule-meta">TERSEDIA • Klik untuk memilih</p>
+                </button>
+            `;
+        }).join('');
+
+        refreshRangeVisual();
+    }
+
+    function pilihSlot(mulai, selesai) {
+        const tanggal = document.getElementById('tanggal').value;
+        if (!tanggal) return;
+
+        // Klik pertama = menentukan jam mulai.
+        if (!rangeMulai || rangeSelesai) {
+            rangeMulai = mulai;
+            rangeSelesai = null;
+            jamTersedia = false;
+
+            document.getElementById('jamMulai').value = mulai;
+            document.getElementById('jamSelesai').value = '';
+            document.getElementById('waktu').value = '';
+            document.getElementById('statusJam').textContent =
+                `🟡 Jam mulai ${mulai.replace(':', '.')} WIB dipilih. Sekarang klik slot terakhir yang Anda inginkan.`;
+            document.getElementById('statusJam').className = 'text-[11px] mb-2 text-amber-700 font-semibold';
+            document.getElementById('rangeAction').classList.add('hidden');
+            refreshRangeVisual();
+            return;
+        }
+
+        // Klik kedua = menentukan jam selesai.
+        let awal = timeToMinutes(rangeMulai);
+        let akhir = timeToMinutes(selesai);
+
+        // Jika user klik slot sebelum jam mulai, otomatis jadikan slot tersebut sebagai awal.
+        if (akhir <= awal) {
+            rangeMulai = mulai;
+            rangeSelesai = null;
+            document.getElementById('jamMulai').value = mulai;
+            document.getElementById('jamSelesai').value = '';
+            document.getElementById('waktu').value = '';
+            document.getElementById('statusJam').textContent =
+                `🟡 Jam mulai ${mulai.replace(':', '.')} WIB dipilih. Sekarang klik slot terakhir yang Anda inginkan.`;
+            document.getElementById('statusJam').className = 'text-[11px] mb-2 text-amber-700 font-semibold';
+            refreshRangeVisual();
+            return;
+        }
+
+        // Pastikan seluruh rentang tidak melewati booking lain.
+        const bentrok = jamTerbooking.some(item => {
+            if (item.tanggal !== tanggal) return false;
+            return awal < timeToMinutes(item.selesai) && akhir > timeToMinutes(item.mulai);
+        });
+
+        if (bentrok) {
+            showToast('Rentang yang dipilih melewati jadwal yang sudah terisi. Pilih rentang lain.', 'warning');
+            document.getElementById('statusJam').textContent =
+                '❌ Rentang melewati jadwal yang sudah dibooking. Pilih jam lain.';
+            document.getElementById('statusJam').className = 'text-[11px] mb-2 text-red-600 font-semibold';
+            jamTersedia = false;
+            document.getElementById('jamSelesai').value = '';
+            document.getElementById('waktu').value = '';
+            refreshRangeVisual();
+            return;
+        }
+
+        rangeSelesai = selesai;
+        document.getElementById('jamMulai').value = rangeMulai;
+        document.getElementById('jamSelesai').value = rangeSelesai;
+        document.getElementById('waktu').value = rangeMulai;
+        jamTersedia = true;
+
+        const durasi = (timeToMinutes(rangeSelesai) - timeToMinutes(rangeMulai)) / 60;
+        const durasiLabel = Number.isInteger(durasi) ? `${durasi} jam` : `${durasi.toFixed(1)} jam`;
+
+        document.getElementById('statusJam').textContent =
+            `✅ Rentang ${rangeMulai.replace(':', '.')}–${rangeSelesai.replace(':', '.')} WIB siap dipesan • Durasi ${durasiLabel}`;
+        document.getElementById('statusJam').className = 'text-[11px] mb-2 text-green-700 font-semibold';
+
+        document.getElementById('rangeSummary').textContent =
+            `${rangeMulai.replace(':', '.')} – ${rangeSelesai.replace(':', '.')} WIB • ${durasiLabel}`;
+        document.getElementById('rangeAction').classList.remove('hidden');
+
+        refreshRangeVisual();
+    }
+
+    function refreshRangeVisual() {
+        const cards = document.querySelectorAll('.schedule-card.available');
+        const start = rangeMulai ? timeToMinutes(rangeMulai) : null;
+        const end = rangeSelesai ? timeToMinutes(rangeSelesai) : null;
+
+        cards.forEach(card => {
+            const cardStart = timeToMinutes(card.dataset.start);
+            const cardEnd = timeToMinutes(card.dataset.end);
+            const meta = card.querySelector('.schedule-meta');
+
+            card.classList.remove('selected', 'in-range', 'range-start', 'range-end');
+
+            if (rangeMulai && !rangeSelesai) {
+                if (cardStart === start) {
+                    card.classList.add('range-start');
+                    meta.textContent = 'JAM MULAI DIPILIH';
+                } else if (cardStart > start) {
+                    meta.textContent = 'KLIK UNTUK JAM AKHIR';
+                } else {
+                    meta.textContent = 'TERSEDIA';
+                }
+            } else if (rangeMulai && rangeSelesai) {
+                if (cardStart === start) {
+                    card.classList.add('range-start');
+                    meta.textContent = 'JAM MULAI';
+                } else if (cardEnd === end) {
+                    card.classList.add('range-end');
+                    meta.textContent = 'JAM SELESAI';
+                } else if (cardStart >= start && cardEnd <= end) {
+                    card.classList.add('in-range');
+                    meta.textContent = 'BAGIAN DARI RENTANG';
+                } else {
+                    meta.textContent = 'TERSEDIA • Klik untuk memilih';
+                }
+            } else {
+                meta.textContent = 'TERSEDIA • Klik untuk memilih';
+            }
+        });
+    }
+
+    function resetRangeSelection(silent = false) {
+        rangeMulai = null;
+        rangeSelesai = null;
+        jamTersedia = false;
+
+        const start = document.getElementById('jamMulai');
+        const end = document.getElementById('jamSelesai');
+        const hidden = document.getElementById('waktu');
+        const action = document.getElementById('rangeAction');
+        const status = document.getElementById('statusJam');
+
+        if (start) start.value = '';
+        if (end) end.value = '';
+        if (hidden) hidden.value = '';
+        if (action) action.classList.add('hidden');
+        if (status && !silent) {
+            status.textContent = 'Pilih jam mulai dan jam akhir pada daftar jadwal.';
+            status.className = 'text-[11px] mb-2 text-gray-500';
+        }
+
+        document.querySelectorAll('.schedule-card.available').forEach(card => {
+            card.classList.remove('selected', 'in-range', 'range-start', 'range-end');
+            const meta = card.querySelector('.schedule-meta');
+            if (meta) meta.textContent = 'TERSEDIA • Klik untuk memilih';
+        });
+    }
+
     function timeToMinutes(hhmm) {
         const [h, m] = hhmm.split(':').map(Number);
         return h * 60 + m;
@@ -1453,7 +1277,12 @@ function resetRangeSelection(clearFields = false) {
             return;
         }
 
-    
+        const bentrok = jamTerbooking.some(item => {
+            if (item.tanggal !== tanggal) return false;
+            return timeToMinutes(mulai) < timeToMinutes(item.selesai)
+                && timeToMinutes(selesai) > timeToMinutes(item.mulai);
+        });
+
         if (bentrok) {
             const bookingBentrok = jamTerbooking.find(item => {
                 if (item.tanggal !== tanggal) return false;
@@ -1489,7 +1318,7 @@ function resetRangeSelection(clearFields = false) {
 
         let valid = true;
 
-        ['nama', 'whatsapp', 'peserta'].forEach(id => {
+        ['nama', 'whatsapp', 'peserta', 'meja'].forEach(id => {
             if (!validateField(id)) valid = false;
         });
 
@@ -1503,12 +1332,13 @@ function resetRangeSelection(clearFields = false) {
         const jamSelesai = document.getElementById('jamSelesai').value;
 
         if (!jamMulai || !jamSelesai) {
-    document.getElementById('errWaktu').textContent = 'Jam mulai dan jam selesai wajib diisi.';
-    document.getElementById('errWaktu').classList.remove('hidden');
-    valid = false;
-} else {
-    document.getElementById('errWaktu').classList.add('hidden');
-}
+            document.getElementById('errWaktu').textContent = 'Jam mulai dan jam selesai wajib diisi.';
+            document.getElementById('errWaktu').classList.remove('hidden');
+            valid = false;
+        } else if (!jamTersedia) {
+            setFieldError('waktu', 'Jam yang Anda pilih belum tersedia. Silakan sesuaikan lagi.');
+            valid = false;
+        }
 
         if (!valid) {
             showToast('Beberapa data belum lengkap atau belum sesuai. Silakan periksa kembali form Anda.', 'error');
@@ -1545,6 +1375,7 @@ function resetRangeSelection(clearFields = false) {
         const jamMulai = document.getElementById('jamMulai').value;
         const jamSelesai = document.getElementById('jamSelesai').value;
         const peserta = document.getElementById('peserta').value;
+        const meja = document.getElementById('meja').value;
 
         const dp = hitungDp(peserta);
 
@@ -1556,6 +1387,7 @@ function resetRangeSelection(clearFields = false) {
         document.getElementById('summaryWaktu').innerText =
             jamMulai.replace(':', '.') + ' - ' + jamSelesai.replace(':', '.') + ' WIB';
         document.getElementById('summaryPeserta').innerText = peserta + ' orang';
+        document.getElementById('summaryMeja').innerText = meja + ' meja';
         document.getElementById('summaryDpRincian').innerText = peserta + ' x ' + formatRupiah(DP_PER_ORANG) + ' = ' + formatRupiah(dp);
         document.getElementById('summaryDpBesar').innerText = formatRupiah(dp);
 
@@ -1652,12 +1484,7 @@ function resetRangeSelection(clearFields = false) {
         try {
 
             const formData = new FormData(form);
-            formData.append('metode_pembayaran', 'dp_qris');
-const buktiInput = document.getElementById('buktiTransfer');
-if (buktiInput && buktiInput.files[0]) {
-formData.append('bukti_transfer', buktiInput.files[0]);
 
-}
             const response = await fetch(form.action, {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
@@ -1748,37 +1575,28 @@ formData.append('bukti_transfer', buktiInput.files[0]);
     // ============================================================
 
     document.getElementById('tanggal').setAttribute('min', new Date().toISOString().split('T')[0]);
-    document.getElementById('tanggal')?.addEventListener(
-    'change',
-    loadAvailability
-);
-let availabilityTimer = null;
 
-function onPesertaChange() {
-    clearTimeout(availabilityTimer);
+</script>
 
-    availabilityTimer = setTimeout(() => {
-        const tanggal = document.getElementById('tanggal').value;
 
-        if (tanggal) {
-            resetRangeSelection(true);
-            onTanggalChange();
-        }
-    }, 300);
-}
-document.getElementById('peserta')?.addEventListener(
-    'input',
-    () => {
-        updateDpPreview();
+<!-- ========================================================= -->
+<!-- SCRIPT HAMBURGER MENU (dibungkus agar tidak bentrok dengan script di atas) -->
+<!-- ========================================================= -->
 
-        clearTimeout(window.availabilityTimer);
+<script>
+    (function () {
+        const toggleBtn = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('icon-open');
+        const iconClose = document.getElementById('icon-close');
 
-        window.availabilityTimer = setTimeout(() => {
-            loadAvailability();
-        }, 300);
-    }
-);
-
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            iconOpen.classList.toggle('hidden', !isHidden);
+            iconClose.classList.toggle('hidden', isHidden);
+            toggleBtn.setAttribute('aria-expanded', String(!isHidden));
+        });
+    })();
 </script>
 
 
