@@ -11,7 +11,7 @@
   <style>
     :root {
       --color-bg:        #FDFBF7;
-      --color-sidebar:   #FDFBF7;      -
+      --color-sidebar:   #FDFBF7;
       --color-card:      #FFFFFF;
       --color-card-hover:#FEFCF8;
       --color-border:    rgba(62,39,35,0.12);
@@ -31,7 +31,7 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', sans-serif;git status
+      font-family: 'Inter', sans-serif;
       background: var(--color-bg);
       color: var(--color-text);
       min-height: 100vh;
@@ -39,7 +39,7 @@
     }
     #app { position: relative; z-index: 1; display: flex; min-height: 100vh; }
 
-    /* SIDEBAR G�� stays dark for contrast */
+    /* SIDEBAR */
 aside {
   width: 220px; flex-shrink: 0;
   background: var(--color-sidebar);
@@ -436,8 +436,6 @@ nav { flex: 1; padding: 10px 0; }
     box-shadow: 0 4px 14px rgba(62, 39, 35, 0.04);
 }
 
-/* Header */
-
 .activity-header {
     display: flex;
     align-items: center;
@@ -452,8 +450,6 @@ nav { flex: 1; padding: 10px 0; }
     font-weight: 700;
     color: #3e2723;
 }
-
-/* View All */
 
 .view-all-btn {
     border: none;
@@ -470,22 +466,16 @@ nav { flex: 1; padding: 10px 0; }
     color: #6d3d21;
 }
 
-/* List */
-
 .activity-list {
     display: flex;
     flex-direction: column;
 }
 
-/* Item */
-
 .activity-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 17px 0;
-
     border-bottom: 1px solid #eee7e2;
 }
 
@@ -494,15 +484,11 @@ nav { flex: 1; padding: 10px 0; }
     padding-bottom: 0;
 }
 
-/* Bagian kiri */
-
 .activity-left {
     display: flex;
     align-items: flex-start;
     gap: 12px;
 }
-
-/* Dot */
 
 .activity-dot {
     width: 7px;
@@ -512,19 +498,9 @@ nav { flex: 1; padding: 10px 0; }
     flex-shrink: 0;
 }
 
-.dot-orange {
-    background: #b96d36;
-}
-
-.dot-green {
-    background: #8da896;
-}
-
-.dot-muted {
-    background: #b7aaa3;
-}
-
-/* Text */
+.dot-orange { background: #b96d36; }
+.dot-green  { background: #8da896; }
+.dot-muted  { background: #b7aaa3; }
 
 .activity-content {
     display: flex;
@@ -544,8 +520,6 @@ nav { flex: 1; padding: 10px 0; }
     color: #9a8e87;
     line-height: 1.4;
 }
-
-/* Time */
 
 .activity-time {
     font-size: 11px;
@@ -578,12 +552,75 @@ nav { flex: 1; padding: 10px 0; }
       thead th, tbody td { padding:12px 10px; }
       .menu-desc { max-width:180px; }
     }
+
+    /* ===== RESPONSIVE ===== */
+    .btn-menu {
+      display: none; width: 40px; height: 40px; border-radius: 10px;
+      border: 1px solid var(--color-border); background: #fff;
+      color: var(--color-primary); cursor: pointer;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .btn-menu svg { width: 20px; height: 20px; }
+    .sidebar-overlay {
+      position: fixed; inset: 0; background: rgba(62,39,35,0.45);
+      z-index: 90; opacity: 0; pointer-events: none; transition: opacity .25s ease;
+    }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .menu-toolbar { gap: 12px; flex-wrap: wrap; }
+
+    @media (max-width: 900px) {
+      .btn-menu { display: inline-flex; }
+
+      /* Sidebar jadi laci yang bisa dibuka-tutup */
+      aside {
+        position: fixed; top: 0; left: 0; bottom: 0; z-index: 95;
+        width: 260px; max-width: 82vw; overflow-y: auto;
+        transform: translateX(-100%); transition: transform .28s cubic-bezier(.16,1,.3,1);
+        box-shadow: none;
+      }
+      body.sidebar-open aside { transform: translateX(0); box-shadow: 0 0 40px rgba(62,39,35,.25); }
+      body.sidebar-open .sidebar-overlay { opacity: 1; pointer-events: auto; }
+      body.sidebar-open { overflow: hidden; }
+
+      header { padding: 12px 16px; position: sticky; top: 0; z-index: 50; }
+      .header-title { font-size: 16px; line-height: 1.2; }
+      .page-body { padding: 20px 16px; }
+      .page-h1 { font-size: 24px; }
+      .page-sub { margin-bottom: 18px; }
+
+      .rsv-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .menu-top { flex-direction: column; gap: 14px; }
+      .menu-top .btn-primary { align-self: flex-start; }
+      .rsv-filters { width: 100%; }
+      .rsv-filters .filter-select { flex: 1; min-width: 0; }
+      .menu-toolbar { flex-direction: column; align-items: stretch !important; }
+      .menu-toolbar .sort-select { width: 100%; }
+
+      table { min-width: 560px; }
+    }
+
+    @media (max-width: 600px) {
+      .rsv-grid { grid-template-columns: 1fr; }
+      .stat-card { padding: 16px; }
+      .stat-number { font-size: 30px; }
+      .activity-card { padding: 18px 16px; }
+      .activity-header h2 { font-size: 19px; }
+      .activity-item { align-items: flex-start; gap: 8px; }
+      .activity-time { margin-left: 8px; }
+      .modal-backdrop { padding: 16px; }
+      .modal { padding: 20px; max-height: 92vh; overflow-y: auto; }
+      .modal-grid2 { grid-template-columns: 1fr; gap: 0; }
+      .login-logo-card { padding: 28px 24px 20px; }
+      .login-form-card { padding: 24px; }
+    }
   </style>
 </head>
 <body>
 
 <!-- ======= LOGIN ======= -->
-<div id="page-login" class="{{ Auth::check() ? 'hidden' : '' }}">  <div class="login-wrap">
+<div id="page-login" class="{{ Auth::check() ? 'hidden' : '' }}">
+  <div class="login-wrap">
     <div class="login-logo-card">
       <div class="login-logo-icon">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 0c0 0-2 4-2 9s2 9 2 9m0-18c0 0 2 4 2 9s-2 9-2 9M3 12h18"/></svg>
@@ -606,25 +643,22 @@ nav { flex: 1; padding: 10px 0; }
           <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
         </button>
       </div>
-<button class="btn-login" onclick="doLogin()" type="button">
-    Masuk ke Dashboard
-
-    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-        />
-    </svg>
-</button>    </div>
+      <button class="btn-login" onclick="doLogin()" type="button">
+        Masuk ke Dashboard
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
+      </button>
+    </div>
   </div>
-  <div class="login-footer">- 2026 Ulam Sari. Admin Portal.</div>
+  <div class="login-footer">&copy; 2026 Ulam Sari. Admin Portal.</div>
 </div>
 
 <!-- ======= APP ======= -->
 <div id="page-app" class="{{ Auth::check() ? '' : 'hidden' }}"><div id="app">
   <!-- SIDEBAR -->
-  <aside>
+  <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+  <aside id="sidebar">
     <div class="brand">
       <div class="brand-logo">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 0c0 0-2 4-2 9s2 9 2 9m0-18c0 0 2 4 2 9s-2 9-2 9M3 12h18"/></svg>
@@ -666,7 +700,12 @@ nav { flex: 1; padding: 10px 0; }
   <!-- MAIN -->
   <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
     <header>
-<div class="header-title">Ulam Sari Dashboard</div>
+      <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+        <button class="btn-menu" type="button" onclick="toggleSidebar()" aria-label="Buka menu">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
+        </button>
+        <div class="header-title">Ulam Sari Dashboard</div>
+      </div>
       <button class="btn-logout" onclick="doLogout()">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
         Logout
@@ -675,254 +714,111 @@ nav { flex: 1; padding: 10px 0; }
     <div class="page-body">
 
       <!-- DASHBOARD -->
-<div id="content-dashboard">
+      <div id="content-dashboard">
 
-    <div class="page-h1">Dashboard Overview</div>
+        <div class="page-h1">Dashboard Overview</div>
 
-    <div class="page-sub">
-        Welcome back. Here is the summary of Ulam Sari's operations today.
-    </div>
+        <div class="page-sub">
+          Welcome back. Here is the summary of Ulam Sari's operations today.
+        </div>
 
+        <div class="stats-grid">
 
-    <div class="stats-grid">
-
-        <!-- TOTAL MENU -->
-        <div class="stat-card">
-
-            <div class="stat-badge badge-green">
-                ● Active
-            </div>
-
+          <!-- TOTAL MENU -->
+          <div class="stat-card">
+            <div class="stat-badge badge-green">● Active</div>
             <div class="stat-icon stat-icon-orange">
-
-                <svg
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                </svg>
-
+              <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
             </div>
+            <div class="stat-number" id="stat-total-menu">{{ count($menus) }}</div>
+            <div class="stat-label">Total Menu Items</div>
+          </div>
 
-            <div
-                class="stat-number"
-                id="stat-total-menu"
-            >
-                {{ count($menus) }}
-            </div>
-
-            <div class="stat-label">
-                Total Menu Items
-            </div>
-
-        </div>
-
-
-        <!-- PENDING RESERVATION -->
-        <div class="stat-card">
-
-            <div class="stat-badge badge-orange">
-                ● Requires Action
-            </div>
-
+          <!-- PENDING RESERVATION -->
+          <div class="stat-card">
+            <div class="stat-badge badge-orange">● Requires Action</div>
             <div class="stat-icon stat-icon-amber">
-
-                <svg
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
-                    />
-                </svg>
-
+              <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
+              </svg>
             </div>
-
-            <div
-                class="stat-number"
-                id="stat-pending"
-            >
-                {{ $reservations->where('status', 'menunggu')->count() }}
-            </div>
-
-            <div class="stat-label">
-                Pending Reservations
-            </div>
+            <div class="stat-number" id="stat-pending">{{ $reservations->where('status', 'menunggu')->count() }}</div>
+            <div class="stat-label">Pending Reservations</div>
+          </div>
 
         </div>
-    <!-- END activity-card -->
 
-
-</div>
-
-    <!-- RECENT ACTIVITY -->
-    <div class="activity-card">
-
-        <div class="activity-header">
-
+        <!-- RECENT ACTIVITY -->
+        <div class="activity-card">
+          <div class="activity-header">
             <h2>Recent Activity</h2>
-
-            <button class="view-all-btn">
-                View All
-            </button>
-
+            <button class="view-all-btn">View All</button>
+          </div>
+          <div id="activity-list" class="activity-list"></div>
         </div>
 
-        <div
-            id="activity-list"
-            class="activity-list"
-        ></div>
-
-    </div>
-
-    </div>
-<!-- ================================= -->
-<!-- END CONTENT DASHBOARD             -->
-<!-- ================================= -->
+      </div>
+      <!-- END CONTENT DASHBOARD -->
 
 
-<!-- MENU -->
-<div id="content-menu" class="hidden">
+      <!-- MENU -->
+      <div id="content-menu" class="hidden">
 
-    <div class="menu-top">
-
-        <div>
-
-            <div class="page-h1">
-                Manajemen Menu
+        <div class="menu-top">
+          <div>
+            <div class="page-h1">Manajemen Menu</div>
+            <div class="page-sub" style="margin-bottom:0;">
+              Kelola hidangan, kategori, dan ketersediaan menu restoran.
             </div>
+          </div>
 
-            <div
-                class="page-sub"
-                style="margin-bottom:0;"
-            >
-                Kelola hidangan, kategori, dan ketersediaan menu restoran.
-            </div>
-
-        </div>
-
-
-        <button
-            class="btn-primary"
-            onclick="openMenuModal()"
-        >
-
-            <svg
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15"
-                />
+          <button class="btn-primary" onclick="openMenuModal()">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
             </svg>
-
             Tambah Menu Baru
+          </button>
+        </div>
 
-        </button>
+        <div class="menu-toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div class="cat-tabs" id="cat-tabs"></div>
 
-    </div>
-
-
-    <div
-        style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:16px;
-        "
-    >
-
-        <div
-            class="cat-tabs"
-            id="cat-tabs"
-        ></div>
-
-
-        <select
-            class="sort-select"
-            id="menu-sort"
-            onchange="renderMenuTable()"
-        >
-
+          <select class="sort-select" id="menu-sort" onchange="renderMenuTable()">
             <option>Terbaru</option>
             <option>Nama A-Z</option>
-
-        </select>
-
-    </div>
-
-
-    <div
-        class="glass-card"
-        style="overflow:hidden;"
-    >
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th style="width:44px;">
-
-                        <input
-                            type="checkbox"
-                            onchange="toggleAllMenu(this)"
-                            style="accent-color:var(--color-secondary);"
-                        />
-
-                    </th>
-
-                    <th>Menu Item</th>
-                    <th>Kategori</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="menu-tbody"></tbody>
-
-        </table>
-
-
-        <div class="table-footer">
-
-            <span
-                class="table-info"
-                id="menu-info"
-            ></span>
-
-
-            <div
-                class="pagination"
-                id="menu-pagination"
-            ></div>
-
+          </select>
         </div>
 
-    </div>
+        <div class="glass-card" style="overflow:hidden;">
+          <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:44px;">
+                  <input type="checkbox" onchange="toggleAllMenu(this)" style="accent-color:var(--color-secondary);" />
+                </th>
+                <th>Menu Item</th>
+                <th>Kategori</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="menu-tbody"></tbody>
+          </table>
+          </div>
 
-</div>
-<!-- END CONTENT MENU -->
- 
-<!-- RESERVASI -->
+          <div class="table-footer">
+            <span class="table-info" id="menu-info"></span>
+            <div class="pagination" id="menu-pagination"></div>
+          </div>
+        </div>
+
+      </div>
+      <!-- END CONTENT MENU -->
+
+      <!-- RESERVASI -->
       <div id="content-reservasi" class="hidden">
         <div class="menu-top">
           <div>
@@ -936,9 +832,12 @@ nav { flex: 1; padding: 10px 0; }
               <option value="dikonfirmasi">Dikonfirmasi</option>
               <option value="ditolak">Ditolak</option>
             </select>
-            <select class="filter-select">
-              <option>Hari Ini</option><option>Minggu Ini</option><option>Bulan Ini</option>
-            </select>
+           <select class="filter-select" id="filter-waktu" onchange="renderReservasi()">
+            <option value="">Semua Waktu</option>
+            <option value="hari">Hari Ini</option>
+            <option value="minggu">Minggu Ini</option>
+            <option value="bulan">Bulan Ini</option>
+          </select>
           </div>
         </div>
         <div class="rsv-grid" id="reservasi-grid"></div>
@@ -975,9 +874,10 @@ nav { flex: 1; padding: 10px 0; }
     <div class="modal-grid2">
       <div class="modal-field">
         <label class="modal-label">Kategori</label>
-<select class="modal-input" id="modal-cat">
-  <option>Aneka Ikan</option><option>Aneka Ayam</option><option>Sayuran & Tumisan</option><option>Menu Lainnya</option>
-</select>      </div>
+        <select class="modal-input" id="modal-cat">
+          <option>Aneka Ikan</option><option>Aneka Ayam</option><option>Sayuran & Tumisan</option><option>Menu Lainnya</option>
+        </select>
+      </div>
       <div class="modal-field">
         <label class="modal-label">Harga (Rp)</label>
         <input class="modal-input" id="modal-price" type="number" placeholder="0" />
@@ -1019,16 +919,17 @@ nav { flex: 1; padding: 10px 0; }
     </div>
     <p id="bukti-info" style="font-size:12px;color:var(--color-muted);margin-bottom:12px;"></p>
     <img id="bukti-img" src="" alt="Bukti transfer"
+         onerror="this.alt='Foto tidak dapat dimuat. Cek lokasi file di server.'"
          style="width:100%;max-height:65vh;object-fit:contain;border-radius:10px;border:1px solid var(--color-border);background:#fff;">
     <div class="modal-footer"><button class="btn-cancel" onclick="closeBuktiModal()">Tutup</button></div>
   </div>
 </div>
 
 <script>
-// CSRF Token Setup G�� must be 'let' because login regenerates the session/token
+// CSRF Token Setup - harus 'let' karena login membuat ulang session/token
 let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-// Initial Data loaded from MySQL
+// Data awal dari MySQL
 let menus = @json($menus);
 let reservations = @json($reservations);
 let activities = @json($activities);
@@ -1038,6 +939,17 @@ const PLACEHOLDER_SVG = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="ht
 const CATS = ['Semua','Aneka Ikan','Aneka Ayam','Sayuran & Tumisan','Menu Lainnya'];
 let catFilter = 'Semua', menuPage = 1, currentEditId = null, pendingImageBase64 = '';
 const PER_PAGE = 10;
+
+// Escape teks supaya aman dimasukkan lewat innerHTML
+function esc(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 async function doLogin() {
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
@@ -1049,43 +961,30 @@ async function doLogin() {
         const res = await fetch('/admin/api/login', {
             method: 'POST',
             credentials: 'same-origin',
-
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+            body: JSON.stringify({ email: email, password: password })
         });
 
         const data = await res.json();
 
-        console.log('LOGIN RESPONSE:', data);
-
         if (res.ok && data.success) {
-
             window.location.href = '/admin';
-
         } else {
-
-            err.textContent =
-                data.message || 'Email atau password salah.';
-
+            err.textContent = data.message || 'Email atau password salah.';
             err.style.display = 'block';
         }
 
     } catch (error) {
-
         console.error('LOGIN ERROR:', error);
-
         err.textContent = 'Terjadi kesalahan koneksi.';
         err.style.display = 'block';
     }
 }
+
 async function doLogout() {
   try {
     await fetch('/admin/api/logout', {
@@ -1102,10 +1001,12 @@ async function doLogout() {
 
   window.location.reload();
 }
+
 function togglePwd() {
   const p = document.getElementById('login-password');
   p.type = p.type === 'password' ? 'text' : 'password';
 }
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !document.getElementById('page-login').classList.contains('hidden')) doLogin();
 });
@@ -1115,12 +1016,7 @@ async function loadReservations() {
     const grid = document.getElementById('reservasi-grid');
 
     grid.innerHTML = `
-        <div style="
-            grid-column:1/-1;
-            text-align:center;
-            padding:60px 0;
-            color:var(--color-muted);
-        ">
+        <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--color-muted);">
             Memuat data reservasi...
         </div>
     `;
@@ -1129,18 +1025,14 @@ async function loadReservations() {
 
         const res = await fetch('/admin/api/reservations', {
             method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            },
+            headers: { 'Accept': 'application/json' },
             credentials: 'same-origin'
         });
 
         const data = await res.json();
 
         if (!res.ok || !data.success) {
-            throw new Error(
-                data.message || 'Gagal mengambil data reservasi.'
-            );
+            throw new Error(data.message || 'Gagal mengambil data reservasi.');
         }
 
         reservations = data.data || [];
@@ -1152,25 +1044,32 @@ async function loadReservations() {
         console.error('Load reservations error:', error);
 
         grid.innerHTML = `
-            <div style="
-                grid-column:1/-1;
-                text-align:center;
-                padding:60px 0;
-                color:var(--color-red);
-            ">
+            <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--color-red);">
                 Gagal mengambil data reservasi.
             </div>
         `;
     }
 }
 
+// =========== SIDEBAR (HP) ===========
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-open');
+}
+function closeSidebar() {
+  document.body.classList.remove('sidebar-open');
+}
+// Kalau layar dilebarkan ke desktop, pastikan laci tertutup
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 900) closeSidebar();
+});
+
 // =========== NAV ===========
 function showPage(page) {
 
+    closeSidebar();
+
     ['dashboard','menu','reservasi'].forEach(p => {
-        document
-            .getElementById('content-' + p)
-            .classList.toggle('hidden', p !== page);
+        document.getElementById('content-' + p).classList.toggle('hidden', p !== page);
 
         const n = document.getElementById('nav-' + p);
 
@@ -1193,6 +1092,7 @@ function showPage(page) {
         loadReservations();
     }
 }
+
 // =========== GSAP ===========
 function animateIn(selector) {
   if (!window.gsap) return;
@@ -1209,8 +1109,7 @@ function renderActivity() {
 
   if (!activityList) return;
 
-  // Kalau database activity masih kosong,
-  // tampilkan contoh sementara supaya desain tidak kosong.
+  // Kalau database activity masih kosong, tampilkan contoh sementara
   const displayActivities = activities.length
     ? activities
     : [
@@ -1234,35 +1133,23 @@ function renderActivity() {
         }
       ];
 
+  const allowedDots = ['dot-orange', 'dot-green', 'dot-muted'];
+
   activityList.innerHTML = displayActivities.map(a => `
     <div class="activity-item">
-
       <div class="activity-left">
-
-        <div class="activity-dot ${a.dot || 'dot-muted'}"></div>
-
+        <div class="activity-dot ${allowedDots.includes(a.dot) ? a.dot : 'dot-muted'}"></div>
         <div class="activity-content">
-
-          <div class="activity-text">
-            ${a.text || 'Aktivitas baru'}
-          </div>
-
-          <div class="activity-sub">
-            ${a.sub || ''}
-          </div>
-
+          <div class="activity-text">${esc(a.text || 'Aktivitas baru')}</div>
+          <div class="activity-sub">${esc(a.sub || '')}</div>
         </div>
-
       </div>
-
-      <div class="activity-time">
-        ${a.time_label || ''}
-      </div>
-
+      <div class="activity-time">${esc(a.time_label || '')}</div>
     </div>
   `).join('');
 
 }
+
 function updateStats() {
   document.getElementById('stat-pending').textContent = reservations.filter(r=>r.status==='menunggu').length;
   document.getElementById('stat-total-menu').textContent = menus.length;
@@ -1271,7 +1158,7 @@ function updateStats() {
 // =========== MENU ===========
 function buildCatTabs() {
   document.getElementById('cat-tabs').innerHTML = CATS.map(c => `
-    <button class="cat-tab ${c===catFilter?'active':''}" onclick="filterCat('${c}')">${c==='Semua'?'Semua Kategori':c}</button>`).join('');
+    <button class="cat-tab ${c===catFilter?'active':''}" onclick="filterCat('${c}')">${c==='Semua'?'Semua Kategori':esc(c)}</button>`).join('');
 }
 function filterCat(c) { catFilter=c; menuPage=1; buildCatTabs(); renderMenuTable(); }
 
@@ -1294,17 +1181,17 @@ function renderMenuTable() {
       <td><input type="checkbox" class="menu-cb" style="accent-color:var(--color-secondary);" /></td>
       <td>
         <div style="display:flex;align-items:center;gap:12px;">
-          <div class="menu-thumb">${m.image ? `<img src="${m.image}" alt="${m.name}"/>` : `<img src="${PLACEHOLDER_SVG}" alt="placeholder"/>`}</div>
-          <div><div class="menu-name">${m.name}</div><div class="menu-desc">${m.desc || ''}</div></div>
+          <div class="menu-thumb">${m.image ? `<img src="${esc(m.image)}" alt="${esc(m.name)}"/>` : `<img src="${PLACEHOLDER_SVG}" alt="placeholder"/>`}</div>
+          <div><div class="menu-name">${esc(m.name)}</div><div class="menu-desc">${esc(m.desc)}</div></div>
         </div>
       </td>
-      <td><span class="cat-pill">${m.cat}</span></td>
-<td>
-  <button onclick="toggleMenuStatus(${m.id})" class="${m.status==='tersedia'?'status-ok':'status-bad'}" style="display:flex;align-items:center;font-size:12px;font-weight:500;background:none;border:none;cursor:pointer;padding:0;">
-    <span class="status-dot"></span>${m.status==='tersedia'?'Tersedia':'Habis'}
-  </button>
-</td>   
-   <td>
+      <td><span class="cat-pill">${esc(m.cat)}</span></td>
+      <td>
+        <button onclick="toggleMenuStatus(${m.id})" class="${m.status==='tersedia'?'status-ok':'status-bad'}" style="display:flex;align-items:center;font-size:12px;font-weight:500;background:none;border:none;cursor:pointer;padding:0;">
+          <span class="status-dot"></span>${m.status==='tersedia'?'Tersedia':'Habis'}
+        </button>
+      </td>
+      <td>
         <div style="display:flex;gap:6px;">
           <button class="action-btn" onclick="editMenu(${m.id})" aria-label="Edit" title="Edit">
             <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
@@ -1314,85 +1201,51 @@ function renderMenuTable() {
           </button>
         </div>
       </td>
-    </tr>`).join('') || `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--color-muted);">Tidak ada menu</td></tr>`;
+    </tr>`).join('') || `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--color-muted);">Tidak ada menu</td></tr>`;
 
-document.getElementById('menu-info').textContent = total > 0
-  ? `Showing ${(menuPage - 1) * PER_PAGE + 1}-${Math.min(menuPage * PER_PAGE, total)} of ${total}`
-  : '0 items';
-const pg = document.getElementById('menu-pagination');
+  document.getElementById('menu-info').textContent = total > 0
+    ? `Showing ${(menuPage - 1) * PER_PAGE + 1}-${Math.min(menuPage * PER_PAGE, total)} of ${total}`
+    : '0 items';
 
-pg.innerHTML = '';
+  const pg = document.getElementById('menu-pagination');
+  pg.innerHTML = '';
 
-if (pages <= 1) return;
+  if (pages <= 1) return;
 
-const pgBtn = (label, p, active, disabled) => {
+  const pgBtn = (label, p, active, disabled) => {
+    const b = document.createElement('button');
+    b.className = 'pg-btn' + (active ? ' active' : '');
+    b.textContent = label;
+    b.disabled = disabled;
+    if (!disabled) {
+      b.onclick = () => {
+        menuPage = p;
+        renderMenuTable();
+      };
+    }
+    return b;
+  };
 
-  const b = document.createElement('button');
+  pg.appendChild(pgBtn('‹', menuPage - 1, false, menuPage === 1));
 
-  b.className = 'pg-btn' + (active ? ' active' : '');
-
-  b.textContent = label;
-
-  b.disabled = disabled;
-
-  if (!disabled) {
-
-    b.onclick = () => {
-
-      menuPage = p;
-
-      renderMenuTable();
-
-    };
-
+  for (let i = 1; i <= pages; i++) {
+    if (i === 1 || i === pages || Math.abs(i - menuPage) <= 1) {
+      pg.appendChild(pgBtn(i, i, i === menuPage, false));
+    } else if (Math.abs(i - menuPage) === 2) {
+      const s = document.createElement('span');
+      s.textContent = '...';
+      s.style.cssText = 'color:var(--color-muted);padding:0 4px;font-size:12px;align-self:center;';
+      pg.appendChild(s);
+    }
   }
 
-  return b;
-
-};
-
-pg.appendChild(
-  pgBtn('‹', menuPage - 1, false, menuPage === 1)
-);
-
-for (let i = 1; i <= pages; i++) {
-
-  if (
-    i === 1 ||
-    i === pages ||
-    Math.abs(i - menuPage) <= 1
-  ) {
-
-    pg.appendChild(
-      pgBtn(i, i, i === menuPage, false)
-    );
-
-  } else if (Math.abs(i - menuPage) === 2) {
-
-    const s = document.createElement('span');
-
-    s.textContent = '...';
-
-    s.style.cssText =
-      'color:var(--color-muted);padding:0 4px;font-size:12px;align-self:center;';
-
-    pg.appendChild(s);
-
-  }
-
-}
-
-pg.appendChild(
-  pgBtn('›', menuPage + 1, false, menuPage === pages)
-);
+  pg.appendChild(pgBtn('›', menuPage + 1, false, menuPage === pages));
 
 } // penutup renderMenuTable()
 
 
 function toggleAllMenu(m) {
-  document
-    .querySelectorAll('.menu-cb')
-    .forEach(c => c.checked = m.checked);
+  document.querySelectorAll('.menu-cb').forEach(c => c.checked = m.checked);
 }
 
 // =========== IMAGE UPLOAD ===========
@@ -1499,23 +1352,17 @@ async function saveMenu() {
 }
 
 function editMenu(id) { openMenuModal(id); }
+
 async function toggleMenuStatus(id) {
     try {
 
-        const response = await 
-        fetch(`/admin/api/menus/${id}/toggle`,
-            {
-                method: 'PATCH',
-
-                headers: {
-                    'X-CSRF-TOKEN': document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute('content'),
-
-                    'Accept': 'application/json'
-                }
+        const response = await fetch(`/admin/api/menus/${id}/toggle`, {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
             }
-        );
+        });
 
         const result = await response.json();
 
@@ -1525,14 +1372,14 @@ async function toggleMenuStatus(id) {
             return;
         }
 
-        // UPDATE DATA MENU DI JAVASCRIPT
+        // Update data menu di JavaScript
         const menu = menus.find(menu => menu.id == id);
 
-       if (menu) {
-    menu.status = result.data.status;
-}
+        if (menu) {
+            menu.status = result.data.status;
+        }
 
-        // RENDER ULANG TABEL
+        // Render ulang tabel
         renderMenuTable();
 
     } catch (error) {
@@ -1543,6 +1390,7 @@ async function toggleMenuStatus(id) {
 
     }
 }
+
 async function deleteMenu(id) {
   if (!confirm('Hapus menu ini?')) return;
   try {
@@ -1577,11 +1425,20 @@ function labelPembayaran(r) {
   return '';
 }
 
+// Susun URL foto bukti dari path yang tersimpan di database
+function buktiUrl(path) {
+  if (!path) return '';
+  if (/^https?:\/\//.test(path)) return path;   // sudah URL lengkap
+  path = String(path).replace(/^\/+/, '');
+  // Dibuka lewat route Laravel (hanya admin login), tanpa symlink /storage
+  return '/admin/bukti/' + path.split('/').map(encodeURIComponent).join('/');
+}
+
 function openBuktiModal(id) {
   const r = reservations.find(x => x.id === id);
   const p = r ? getBuktiDp(r) : null;
   if (!p) return;
-  document.getElementById('bukti-img').src = '/storage/' + p.payment_proof;
+  document.getElementById('bukti-img').src = buktiUrl(p.payment_proof);
   document.getElementById('bukti-info').textContent =
     r.customer + ' • DP Rp ' + Number(p.amount).toLocaleString('id-ID');
   document.getElementById('modal-bukti').classList.add('open');
@@ -1591,31 +1448,70 @@ function closeBuktiModal() {
   document.getElementById('modal-bukti').classList.remove('open');
   document.getElementById('bukti-img').src = '';
 }
+
 const statusLabel = {menunggu:'Menunggu Konfirmasi',dikonfirmasi:'Dikonfirmasi',ditolak:'Ditolak'};
+
+function parseTanggalKirim(str) {
+  if (!str) return null;
+  // jaga-jaga kalau formatnya 'YYYY-MM-DD HH:MM:SS' tanpa zona waktu, anggap UTC
+  const s = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(str) ? str.replace(' ', 'T') + 'Z' : str;
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
+}
+
+function cocokFilterWaktu(r, filter) {
+  if (!filter) return true;
+
+  const d = parseTanggalKirim(r.created_at);
+  if (!d) return false;
+
+  const now = new Date();
+
+  if (filter === 'hari') {
+    return d.toDateString() === now.toDateString();
+  }
+
+  if (filter === 'bulan') {
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }
+
+  if (filter === 'minggu') {
+    // minggu ini = Senin sampai Minggu
+    const awal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    awal.setDate(awal.getDate() - ((awal.getDay() + 6) % 7));
+    const akhir = new Date(awal);
+    akhir.setDate(akhir.getDate() + 7);
+    return d >= awal && d < akhir;
+  }
+
+  return true;
+}
+
 function renderReservasi() {
-  const sf = document.getElementById('filter-status').value;
-  const data = sf ? reservations.filter(r=>r.status===sf) : [...reservations];
+const sf = document.getElementById('filter-status').value;
+const wf = document.getElementById('filter-waktu').value;
+const data = reservations.filter(r => (!sf || r.status === sf) && cocokFilterWaktu(r, wf));
   const grid = document.getElementById('reservasi-grid');
   grid.innerHTML = data.length ? data.map(r => `
     <div class="rsv-card rsv-card-${r.status}">
       <div class="rsv-header">
-        <span class="rsv-badge rsv-badge-${r.status}">${statusLabel[r.status]}</span>
+        <span class="rsv-badge rsv-badge-${r.status}">${statusLabel[r.status] || esc(r.status)}</span>
         <span class="rsv-code">#RSV-${String(r.id).padStart(3,'0')}</span>
       </div>
-      <div class="rsv-name">${r.customer}</div>
+      <div class="rsv-name">${esc(r.customer)}</div>
       <div class="rsv-detail">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5"/></svg>
-        ${r.date}, ${r.time}
+        ${esc(r.date)}, ${esc(r.time)}
       </div>
       <div class="rsv-detail">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
-        ${r.guests} Orang
+        ${esc(r.guests)} Orang
       </div>
       <div class="rsv-detail">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-        ${r.phone || '-'}
+        ${esc(r.phone || '-')}
       </div>
-      
+
       ${labelPembayaran(r) ? `
       <div class="rsv-detail">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
@@ -1671,11 +1567,11 @@ function openRsvModal(id) {
   document.getElementById('modal-rsv-body').innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;background:rgba(62,39,35,0.03);border:1px solid var(--color-border);border-radius:12px;padding:16px;margin-bottom:16px;">
       <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Kode</div><div style="font-weight:700;color:var(--color-secondary);">#RSV-${String(r.id).padStart(3,'0')}</div></div>
-      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Status</div><div>${statusLabel[r.status]}</div></div>
-      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Pelanggan</div><div style="font-weight:600;">${r.customer}</div></div>
-      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Telepon</div><div>${r.phone || '-'}</div></div>
-      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Tanggal</div><div>${r.date}</div></div>
-      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Waktu & Tamu</div><div>${r.time} - ${r.guests} org </div></div>
+      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Status</div><div>${statusLabel[r.status] || esc(r.status)}</div></div>
+      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Pelanggan</div><div style="font-weight:600;">${esc(r.customer)}</div></div>
+      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Telepon</div><div>${esc(r.phone || '-')}</div></div>
+      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Tanggal</div><div>${esc(r.date)}</div></div>
+      <div><div style="font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Waktu & Tamu</div><div>${esc(r.time)} - ${esc(r.guests)} org </div></div>
     </div>`;
   document.getElementById('modal-rsv').classList.add('open');
 }
@@ -1684,42 +1580,17 @@ function closeRsvModal() {
 }
 
 
-// Close on backdrop
-
-document.getElementById('modal-menu').addEventListener('click', e => {
-
-    if (e.target === e.currentTarget) {
-        closeMenuModal();
-    }
-
-});
-
-document.getElementById('modal-rsv').addEventListener('click', e => {
-
-    if (e.target === e.currentTarget) {
-        closeRsvModal();
-    }
-
-});
+// Tutup modal saat klik area gelap
+document.getElementById('modal-menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeMenuModal(); });
+document.getElementById('modal-rsv').addEventListener('click', e => { if (e.target === e.currentTarget) closeRsvModal(); });
+document.getElementById('modal-bukti').addEventListener('click', e => { if (e.target === e.currentTarget) closeBuktiModal(); });
 
 
 // INITIAL LOAD
-
 document.addEventListener('DOMContentLoaded', () => {
-
     renderActivity();
-
     updateStats();
-
-});
-// Close on backdrop
-document.getElementById('modal-menu').addEventListener('click', e => { if(e.target===e.currentTarget) closeMenuModal(); });
-document.getElementById('modal-rsv').addEventListener('click', e => { if(e.target===e.currentTarget) closeRsvModal(); });
-document.getElementById('modal-bukti').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeBuktiModal();
 });
 </script>
 </body>
 </html>
-
-

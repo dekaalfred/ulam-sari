@@ -197,7 +197,6 @@
 
 <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 w-[calc(100%-2.5rem)] max-w-sm"></div>
 
-
 <!-- ========================================================= -->
 <!-- NAVBAR -->
 <!-- ========================================================= -->
@@ -1576,6 +1575,27 @@
 
     document.getElementById('tanggal').setAttribute('min', new Date().toISOString().split('T')[0]);
 
+</script>
+
+
+<!-- ========================================================= -->
+<!-- SCRIPT HAMBURGER MENU (dibungkus agar tidak bentrok dengan script di atas) -->
+<!-- ========================================================= -->
+
+<script>
+    (function () {
+        const toggleBtn = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('icon-open');
+        const iconClose = document.getElementById('icon-close');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            iconOpen.classList.toggle('hidden', !isHidden);
+            iconClose.classList.toggle('hidden', isHidden);
+            toggleBtn.setAttribute('aria-expanded', String(!isHidden));
+        });
+    })();
 </script>
 
 
